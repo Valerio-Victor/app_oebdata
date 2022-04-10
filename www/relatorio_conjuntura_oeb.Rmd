@@ -6,8 +6,11 @@ output:
   rmdformats::readthedown:
     highlight: kate
 params:
-  responsavel: 'Manoel Saraiva'
-  instituicao_do_responsavel: 'USPI'
+  responsavel: ''
+  instituicao_do_responsavel: ''
+  pib_texto: ''
+  otica_produto_texto: ''
+  otica_demanda_texto: ''
 ---
 
 
@@ -74,27 +77,44 @@ h1.title, h1.title p {
 ```
 
 
-```{r capa, echo = F, fig.align = 'center', out.width = '100%'}
-
-knitr::include_graphics(path = 'capa_relatorio.png')
-
+```{r capa, echo = F, fig.align = 'center', out.width = '75%'}
+knitr::include_graphics(path = 'relatorio_capa.png')
 ```
-
 
 
 <div style="text-align: justify">
 
 
-Este relatório foi orgnizado a partir do aplicativo **OEB-Data** e, neste sentido, 
-todos os dados foram tratatos e reportados pela Ordem dos Economistas do Brasil. 
-Contudo, o conteúdo da análise é de inteira responsabilidade de 
-**`r params$responsavel`** (**`r params$instituicao_do_responsavel`**).
+Este relatório foi orgnizado a partir da aplicação web **OEB-Data** e, 
+neste sentido, todos os dados foram tratatos e reportados pela Ordem dos 
+Economistas do Brasil. Contudo, o conteúdo da análise é de inteira 
+responsabilidade de **`r params$responsavel`** 
+(**`r params$instituicao_do_responsavel`**).
+
+
+```{r dados,include=FALSE, message=FALSE, warning=FALSE}
+resultados <- readRDS('../www/resultados.rds')
+```
+
 
 # PRODUTO INTERNO BRUTO
 
+<div style="text-align: justify">
+
+`r params$pib_texto`
+
+```{r pib_indice, echo=FALSE}
+resultados[['graf_pib_indice']]
+```
+
+
 # ÓTICA DO PRODUTO
+
+`r params$otica_produto_texto`
+
 
 # ÓTICA DA DEMANDA
 
 
+`r params$otica_demanda_texto`
 
