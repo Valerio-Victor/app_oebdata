@@ -104,31 +104,31 @@ resultados <- readRDS('../www/resultados.rds')
 ### PIB (Número Índice)
 
 ```{r indice, echo=FALSE}
-resultados[['graf_pib_indice']]
+resultados[['grafico_pib_indice']]
 ```
 
 ### PIB (Variação no Número Índice)
 
 ```{r indice_variacao, echo=FALSE}
-resultados[['graf_var_pib_indice']]
+resultados[['grafico_var_pib_indice']]
 ```
 
 ### PIB Efetivo x PIB Potencial
 
 ```{r efetivo_potencial, echo=FALSE}
-resultados[['graf_real_potencial']]
+resultados[['grafico_real_potencial']]
 ```
 
 ### Hiato do Produto
 
 ```{r hiato, echo=FALSE}
-resultados[['graf_hiato']]
+resultados[['grafico_hiato']]
 ```
 
 ### PIB (Valores Reais)
 
 ```{r valores, echo=FALSE}
-resultados[['tab_pib_vc']]
+resultados[['tabela_pib_vc']]
 ```
 
 # ÓTICA DO PRODUTO 
@@ -142,19 +142,19 @@ resultados[['tab_pib_vc']]
 ### PIB Setorial (Número Índice)
 
 ```{r setores, echo=FALSE}
-resultados[['graf_pib_setores_indice']]
+resultados[['grafico_pib_setores_indice']]
 ```
 
 ### PIB Setorial (Variação no Número Índice)
 
 ```{r variacao_setores, echo=FALSE}
-resultados[['graf_var_pib_setores_indice']]
+resultados[['grafico_var_pib_setores_indice']]
 ```
 
 ### PIB Setorial (valores)
 
 ```{r valores_setores, echo=FALSE}
-resultados[['tab_pib_setores_vc']]
+resultados[['tabela_pib_setores_vc']]
 ```
 
 # ÓTICA DA DEMANDA {.tabset}
@@ -168,17 +168,17 @@ resultados[['tab_pib_setores_vc']]
 ### DA (Número Índice)
 
 ```{r demanda, echo=FALSE}
-resultados[['graf_pib_demanda_indice']]
+resultados[['grafico_pib_demanda_indice']]
 ```
 
 ### DA (Variação no Número Índice)
 
 ```{r variacao_demanda, echo=FALSE}
-resultados[['graf_var_pib_demanda_indice']]
+resultados[['grafico_var_pib_demanda_indice']]
 ```
 
 ### DA (valores)
 
 ```{r valores_demanda, echo=FALSE}
-resultados[['tab_pib_demanda_vc']]
+resultados[['tabela_pib_demanda_vc']]
 ```

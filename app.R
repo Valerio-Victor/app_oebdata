@@ -7,6 +7,15 @@ library(shiny)
 library(shinydashboard)
 
 
+library(plotly)
+
+
+library(reactable)
+
+
+library(rmarkdown)
+
+
 library(magrittr, include.only = '%>%')
 
 
@@ -122,12 +131,12 @@ fluidRow(
       collapsed = FALSE,
       fluidRow(
         column(width = 7,
-               fluidRow(column(width = 12, plotly::plotlyOutput('graf_pib_indice'))),
-               fluidRow(column(width = 12, plotly::plotlyOutput('graf_var_pib_indice')))),
-        column(width = 5, reactable::reactableOutput('tab_pib_vc', height = '763px'))
+               fluidRow(column(width = 12, plotly::plotlyOutput('grafico_pib_indice'))),
+               fluidRow(column(width = 12, plotly::plotlyOutput('grafico_var_pib_indice')))),
+        column(width = 5, reactable::reactableOutput('tabela_pib_vc', height = '763px'))
         ),
-      fluidRow(column(width = 6, plotly::plotlyOutput('graf_real_potencial')),
-               column(width = 6, plotly::plotlyOutput('graf_hiato'))),
+      fluidRow(column(width = 6, plotly::plotlyOutput('grafico_real_potencial')),
+               column(width = 6, plotly::plotlyOutput('grafico_hiato'))),
       box(title = 'Análise',
           width = 12,
           status = 'primary',
@@ -158,9 +167,9 @@ fluidRow(
       collapsed = FALSE,
       fluidRow(
         column(width = 7,
-               fluidRow(column(width = 12, plotly::plotlyOutput('graf_pib_setores_indice'))),
-               fluidRow(column(width = 12, plotly::plotlyOutput('graf_var_pib_setores_indice')))),
-        column(width = 5, reactable::reactableOutput('tab_pib_setores_vc', height = '763px'))
+               fluidRow(column(width = 12, plotly::plotlyOutput('grafico_pib_setores_indice'))),
+               fluidRow(column(width = 12, plotly::plotlyOutput('grafico_var_pib_setores_indice')))),
+        column(width = 5, reactable::reactableOutput('tabela_pib_setores_vc', height = '763px'))
       ),
       box(title = 'Análise',
           width = 12,
@@ -192,9 +201,9 @@ fluidRow(
       collapsed = FALSE,
       fluidRow(
         column(width = 7,
-               fluidRow(column(width = 12, plotly::plotlyOutput('graf_pib_demanda_indice'))),
-               fluidRow(column(width = 12, plotly::plotlyOutput('graf_var_pib_demanda_indice')))),
-        column(width = 5, reactable::reactableOutput('tab_pib_demanda_vc', height = '763px'))
+               fluidRow(column(width = 12, plotly::plotlyOutput('grafico_pib_demanda_indice'))),
+               fluidRow(column(width = 12, plotly::plotlyOutput('grafico_var_pib_demanda_indice')))),
+        column(width = 5, reactable::reactableOutput('tabela_pib_demanda_vc', height = '763px'))
       ),
       box(title = 'Análise',
           width = 12,
@@ -229,56 +238,87 @@ server <- function(input, output, session) {
 # Importação dos Dados ---------------------------------------------------------
 observeEvent(input$iniciar, {
 
-library(magrittr, include.only = '%>%')
+
+
+withProgress(message = 'Iniciando a análise...', value = 0.1, {
+
+incProgress(0.9)
+
+Sys.sleep(0.25)
 
 resultados <- readRDS('./www/resultados.rds')
 
-output$graf_pib_indice <- plotly::renderPlotly(
-  resultados[['graf_pib_indice']]
+incProgress(1, message = 'Importando os dados...')
+
+Sys.sleep(0.25)
+
+output$grafico_pib_indice <- plotly::renderPlotly(
+  resultados[['grafico_pib_indice']]
 )
 
-output$graf_var_pib_indice <- plotly::renderPlotly(
-  resultados[['graf_var_pib_indice']]
+output$grafico_var_pib_indice <- plotly::renderPlotly(
+  resultados[['grafico_var_pib_indice']]
 )
 
-output$tab_pib_vc <- reactable::renderReactable(
-  resultados[['tab_pib_vc']]
+incProgress(1)
+
+output$tabela_pib_vc <- reactable::renderReactable(
+  resultados[['tabela_pib_vc']]
 )
 
-output$graf_real_potencial <- plotly::renderPlotly(
-  resultados[['graf_real_potencial']]
+incProgress(1)
+
+output$grafico_real_potencial <- plotly::renderPlotly(
+  resultados[['grafico_real_potencial']]
 )
 
-output$graf_hiato <- plotly::renderPlotly(
-  resultados[['graf_hiato']]
+incProgress(1)
+
+output$grafico_hiato <- plotly::renderPlotly(
+  resultados[['grafico_hiato']]
 )
 
-output$graf_pib_setores_indice <- plotly::renderPlotly(
-  resultados[['graf_pib_setores_indice']]
+incProgress(1)
+
+output$grafico_pib_setores_indice <- plotly::renderPlotly(
+  resultados[['grafico_pib_setores_indice']]
 )
 
-output$graf_var_pib_setores_indice <- plotly::renderPlotly(
-  resultados[['graf_var_pib_setores_indice']]
+incProgress(1)
+
+output$grafico_var_pib_setores_indice <- plotly::renderPlotly(
+  resultados[['grafico_var_pib_setores_indice']]
 )
 
-output$tab_pib_setores_vc <- reactable::renderReactable(
-  resultados[['tab_pib_setores_vc']]
+incProgress(1)
+
+output$tabela_pib_setores_vc <- reactable::renderReactable(
+  resultados[['tabela_pib_setores_vc']]
 )
 
-output$graf_pib_demanda_indice <- plotly::renderPlotly(
-  resultados[['graf_pib_demanda_indice']]
+incProgress(1, message = 'Inserindo os dados...')
+
+Sys.sleep(0.25)
+
+output$grafico_pib_demanda_indice <- plotly::renderPlotly(
+  resultados[['grafico_pib_demanda_indice']]
 )
 
-output$graf_var_pib_demanda_indice <- plotly::renderPlotly(
-  resultados[['graf_var_pib_demanda_indice']]
+output$grafico_var_pib_demanda_indice <- plotly::renderPlotly(
+  resultados[['grafico_var_pib_demanda_indice']]
 )
 
-output$tab_pib_demanda_vc <- reactable::renderReactable(
-  resultados[['tab_pib_demanda_vc']]
+output$tabela_pib_demanda_vc <- reactable::renderReactable(
+  resultados[['tabela_pib_demanda_vc']]
 )
+
+incProgress(1)
+
+
 
 })
 
+})
 
 nome <- reactive(input$nome_responsavel)
 

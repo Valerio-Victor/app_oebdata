@@ -1,0 +1,11 @@
+name: webapp
+title:
+username:
+account: oeb-data
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6059355
+bundleId: 5784526
+url: https://oeb-data.shinyapps.io/webapp/
+when: 1649624835.02456
+lastSyncTime: 1649624835.02456
