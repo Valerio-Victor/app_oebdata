@@ -90,7 +90,7 @@ responsabilidade de **`r params$responsavel`**
 (**`r params$instituicao_do_responsavel`**).
 
 ```{r dados,include=FALSE, message=FALSE, warning=FALSE}
-resultados <- readRDS('../www/resultados.rds')
+resultados <- readRDS('../resultados.rds')
 ```
 
 # PRODUTO INTERNO BRUTO 

@@ -246,7 +246,7 @@ incProgress(0.9)
 
 Sys.sleep(0.25)
 
-resultados <- readRDS('./www/resultados.rds')
+resultados <- readRDS('resultados.rds')
 
 incProgress(1, message = 'Importando os dados...')
 
@@ -331,10 +331,10 @@ otica_produto_texto <- reactive(input$texto_otica_produto)
 otica_demanda_texto <- reactive(input$texto_otica_demanda)
 
 output$exportar <- downloadHandler(
-  filename = paste0('relatorio_conjuntura_oeb','.html'),
+  filename = 'relatorio_conjuntura_oeb.html',
   content = function(file) {
    rmarkdown::render(
-     input = 'www/relatorio_conjuntura_oeb.Rmd',
+     input = 'www/template.Rmd',
      output_file = file,
      params = list(responsavel = nome(),
                    instituicao_do_responsavel = instituicao(),
