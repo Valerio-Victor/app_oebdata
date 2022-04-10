@@ -1,0 +1,100 @@
+---
+title: 'Relatório de Conjuntura Macroeconômica'
+subtitle: ''
+date: "Última Atualização: `r format(Sys.Date(), '%d/%m/%Y')`"
+output:
+  rmdformats::readthedown:
+    highlight: kate
+params:
+  responsavel: 'Manoel Saraiva'
+  instituicao_do_responsavel: 'USPI'
+---
+
+
+```{css, echo = F}
+
+
+#sidebar h2 {
+    z-index: 200;
+    background-color: #143e5e;
+    text-align: center;
+    padding: 0.809em;
+    display: block;
+    color: #fcfcfc;
+    font-size: 100%;
+    margin-top: 0px;
+    margin-bottom: 0.809em;
+}
+
+
+#sidebar {
+    position: fixed;
+    top: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #00253d;
+    z-index: 200;
+    font-size: 16px;
+}
+
+
+#postamble {
+    color: #fcfcfc;
+    background: #143e5e;
+    border-top: solid 10px #00253d;
+    font-family: "Lato","proxima-nova","Helvetica Neue",Arial,sans-serif;
+    font-size: 90%;
+    z-index: 400;
+    padding: 12px;
+}
+
+
+#sidebar a:hover {
+    background-color: #143e5e;
+    cursor: pointer;
+}
+
+
+h1, h2, h3, h4, h5, h6, legend {
+    font-family: "Roboto Slab","ff-tisa-web-pro","Georgia",Arial,sans-serif;
+    font-weight: 700;
+    color: #143e5e;
+}
+
+h1.title, h1.title p {
+  
+  color: #fcfcfc;
+  font-size: 1%;
+
+}
+
+
+```
+
+
+```{r capa, echo = F, fig.align = 'center', out.width = '100%'}
+
+knitr::include_graphics(path = 'capa_relatorio.png')
+
+```
+
+
+
+<div style="text-align: justify">
+
+
+Este relatório foi orgnizado a partir do aplicativo **OEB-Data** e, neste sentido, 
+todos os dados foram tratatos e reportados pela Ordem dos Economistas do Brasil. 
+Contudo, o conteúdo da análise é de inteira responsabilidade de 
+**`r params$responsavel`** (**`r params$instituicao_do_responsavel`**).
+
+# PRODUTO INTERNO BRUTO
+
+# ÓTICA DO PRODUTO
+
+# ÓTICA DA DEMANDA
+
+
+
