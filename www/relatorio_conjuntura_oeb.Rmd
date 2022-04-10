@@ -13,7 +13,6 @@ params:
   otica_demanda_texto: ''
 ---
 
-
 ```{css, echo = F}
 
 
@@ -76,45 +75,110 @@ h1.title, h1.title p {
 
 ```
 
-
 ```{r capa, echo = F, fig.align = 'center', out.width = '75%'}
 knitr::include_graphics(path = 'relatorio_capa.png')
 ```
 
+# INTRODUÇÃO {-}
 
 <div style="text-align: justify">
 
-
 Este relatório foi orgnizado a partir da aplicação web **OEB-Data** e, 
-neste sentido, todos os dados foram tratatos e reportados pela Ordem dos 
-Economistas do Brasil. Contudo, o conteúdo da análise é de inteira 
+neste sentido, todos os dados foram compilados e reportados pela **Ordem dos 
+Economistas do Brasil (OEB)**. Contudo, o conteúdo da análise é de inteira 
 responsabilidade de **`r params$responsavel`** 
 (**`r params$instituicao_do_responsavel`**).
-
 
 ```{r dados,include=FALSE, message=FALSE, warning=FALSE}
 resultados <- readRDS('../www/resultados.rds')
 ```
 
-
-# PRODUTO INTERNO BRUTO
+# PRODUTO INTERNO BRUTO 
 
 <div style="text-align: justify">
 
 `r params$pib_texto`
 
-```{r pib_indice, echo=FALSE}
+## {.tabset}
+
+### PIB (Número Índice)
+
+```{r indice, echo=FALSE}
 resultados[['graf_pib_indice']]
 ```
 
+### PIB (Variação no Número Índice)
 
-# ÓTICA DO PRODUTO
+```{r indice_variacao, echo=FALSE}
+resultados[['graf_var_pib_indice']]
+```
+
+### PIB Efetivo x PIB Potencial
+
+```{r efetivo_potencial, echo=FALSE}
+resultados[['graf_real_potencial']]
+```
+
+### Hiato do Produto
+
+```{r hiato, echo=FALSE}
+resultados[['graf_hiato']]
+```
+
+### PIB (Valores Reais)
+
+```{r valores, echo=FALSE}
+resultados[['tab_pib_vc']]
+```
+
+# ÓTICA DO PRODUTO 
+
+<div style="text-align: justify">
 
 `r params$otica_produto_texto`
 
+## {.tabset}
 
-# ÓTICA DA DEMANDA
+### PIB Setorial (Número Índice)
 
+```{r setores, echo=FALSE}
+resultados[['graf_pib_setores_indice']]
+```
+
+### PIB Setorial (Variação no Número Índice)
+
+```{r variacao_setores, echo=FALSE}
+resultados[['graf_var_pib_setores_indice']]
+```
+
+### PIB Setorial (valores)
+
+```{r valores_setores, echo=FALSE}
+resultados[['tab_pib_setores_vc']]
+```
+
+# ÓTICA DA DEMANDA {.tabset}
+
+<div style="text-align: justify">
 
 `r params$otica_demanda_texto`
 
+## {.tabset}
+
+### DA (Número Índice)
+
+```{r demanda, echo=FALSE}
+resultados[['graf_pib_demanda_indice']]
+```
+
+### DA (Variação no Número Índice)
+
+```{r variacao_demanda, echo=FALSE}
+resultados[['graf_var_pib_demanda_indice']]
+```
+
+### DA (valores)
+
+```{r valores_demanda, echo=FALSE}
+resultados[['tab_pib_demanda_vc']]
+```
