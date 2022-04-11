@@ -25,17 +25,11 @@ library(rlang)
 library(htmltools)
 
 
-#---------------------------------------------------------------------------------------------------
-#-----------------------------------PREPARANDO BARRAS DE PROGRESSO----------------------------------
-#---------------------------------------------------------------------------------------------------
-aviso_inicial <- tagList(
-  waiter::spin_solar(),
-  br(),
-  h3('GERANDO O RELATÓRIO'),
-  br(),
-  h4('Isto pode demorar alguns minutos...')
-)
+url = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/resultados.rds'
 
+temporario = tempfile()
+
+download.file(url, destfile = temporario)
 #---------------------------------------------------------------------------------------------------
 #--------------------------------------------UI-----------------------------------------------------
 #---------------------------------------------------------------------------------------------------
@@ -54,7 +48,11 @@ sidebarMenu(
 
 menuItem('CONJUNTURA ECONÔMICA', tabName = 'orientacao', icon = icon('area-chart'),
   menuSubItem('Relatório de Conjuntura', tabName = 'conjuntura_total', icon = icon('file-text-o'))
-)
+),
+
+hr(),
+
+div(style = 'text-align:center', 'Versão 1.0.0')
 
 )
 
@@ -135,20 +133,35 @@ fluidRow(
                fluidRow(column(width = 12, plotly::plotlyOutput('grafico_var_pib_indice')))),
         column(width = 5, reactable::reactableOutput('tabela_pib_vc', height = '763px'))
         ),
+      fluidRow(column(width = 12,
+                      box(title = 'Análise',
+                          width = 12,
+                          status = 'primary',
+                          solidHeader = TRUE,
+                          collapsible = FALSE,
+                          collapsed = FALSE,
+                          fluidRow(column(width = 12, textAreaInput('texto_pib',
+                                                                    label = h4(''),
+                                                                    value = 'Insira aqui a sua análise...',
+                                                                    width = '100%',
+                                                                    rows = 5,
+                                                                    resize = 'vertical')))))
+      ),
       fluidRow(column(width = 6, plotly::plotlyOutput('grafico_real_potencial')),
                column(width = 6, plotly::plotlyOutput('grafico_hiato'))),
-      box(title = 'Análise',
-          width = 12,
-          status = 'primary',
-          solidHeader = TRUE,
-          collapsible = FALSE,
-          collapsed = FALSE,
-          fluidRow(column(width = 12, textAreaInput('texto_pib',
-                                                    label = h4(''),
-                                                    value = 'Insira aqui a sua análise...',
-                                                    width = '100%',
-                                                    rows = 5,
-                                                    resize = 'vertical')))
+      fluidRow(column(width = 12,
+                      box(title = 'Análise',
+                          width = 12,
+                          status = 'primary',
+                          solidHeader = TRUE,
+                          collapsible = FALSE,
+                          collapsed = FALSE,
+                          fluidRow(column(width = 12, textAreaInput('texto_pib_hiato',
+                                                                    label = h4(''),
+                                                                    value = 'Insira aqui a sua análise...',
+                                                                    width = '100%',
+                                                                    rows = 5,
+                                                                    resize = 'vertical')))))
       )
   )
 ),
@@ -171,6 +184,7 @@ fluidRow(
                fluidRow(column(width = 12, plotly::plotlyOutput('grafico_var_pib_setores_indice')))),
         column(width = 5, reactable::reactableOutput('tabela_pib_setores_vc', height = '763px'))
       ),
+      fluidRow(column(width = 12,
       box(title = 'Análise',
           width = 12,
           status = 'primary',
@@ -182,7 +196,7 @@ fluidRow(
                                                     value = 'Insira aqui a sua análise...',
                                                     width = '100%',
                                                     rows = 5,
-                                                    resize = 'vertical')))
+                                                    resize = 'vertical')))))
       )
   )
 ),
@@ -205,6 +219,7 @@ fluidRow(
                fluidRow(column(width = 12, plotly::plotlyOutput('grafico_var_pib_demanda_indice')))),
         column(width = 5, reactable::reactableOutput('tabela_pib_demanda_vc', height = '763px'))
       ),
+      fluidRow(column(width = 12,
       box(title = 'Análise',
           width = 12,
           status = 'primary',
@@ -216,7 +231,7 @@ fluidRow(
                                                     value = 'Insira aqui a sua análise...',
                                                     width = '100%',
                                                     rows = 5,
-                                                    resize = 'vertical')))
+                                                    resize = 'vertical')))))
       )
   )
 )
@@ -242,15 +257,21 @@ observeEvent(input$iniciar, {
 
 withProgress(message = 'Iniciando a análise...', value = 0.1, {
 
+Sys.sleep(1)
+
 incProgress(0.9)
-
-Sys.sleep(0.25)
-
-resultados <- readRDS('resultados.rds')
 
 incProgress(1, message = 'Importando os dados...')
 
-Sys.sleep(0.25)
+Sys.sleep(1)
+
+incProgress(7, message = 'Aguarde, mesmo após a barra de progresso desaparecer há processamento de dados!')
+
+Sys.sleep(3)
+
+})
+
+resultados <- readRDS(temporario)
 
 output$grafico_pib_indice <- plotly::renderPlotly(
   resultados[['grafico_pib_indice']]
@@ -260,45 +281,29 @@ output$grafico_var_pib_indice <- plotly::renderPlotly(
   resultados[['grafico_var_pib_indice']]
 )
 
-incProgress(1)
-
 output$tabela_pib_vc <- reactable::renderReactable(
   resultados[['tabela_pib_vc']]
 )
-
-incProgress(1)
 
 output$grafico_real_potencial <- plotly::renderPlotly(
   resultados[['grafico_real_potencial']]
 )
 
-incProgress(1)
-
 output$grafico_hiato <- plotly::renderPlotly(
   resultados[['grafico_hiato']]
 )
-
-incProgress(1)
 
 output$grafico_pib_setores_indice <- plotly::renderPlotly(
   resultados[['grafico_pib_setores_indice']]
 )
 
-incProgress(1)
-
 output$grafico_var_pib_setores_indice <- plotly::renderPlotly(
   resultados[['grafico_var_pib_setores_indice']]
 )
 
-incProgress(1)
-
 output$tabela_pib_setores_vc <- reactable::renderReactable(
   resultados[['tabela_pib_setores_vc']]
 )
-
-incProgress(1, message = 'Inserindo os dados...')
-
-Sys.sleep(0.25)
 
 output$grafico_pib_demanda_indice <- plotly::renderPlotly(
   resultados[['grafico_pib_demanda_indice']]
@@ -312,12 +317,6 @@ output$tabela_pib_demanda_vc <- reactable::renderReactable(
   resultados[['tabela_pib_demanda_vc']]
 )
 
-incProgress(1)
-
-
-
-})
-
 })
 
 nome <- reactive(input$nome_responsavel)
@@ -325,6 +324,8 @@ nome <- reactive(input$nome_responsavel)
 instituicao <- reactive(input$inst_responsavel)
 
 pib_texto <- reactive(input$texto_pib)
+
+texto_pib_hiato <- reactive(input$texto_pib_hiato)
 
 otica_produto_texto <- reactive(input$texto_otica_produto)
 
@@ -339,6 +340,7 @@ output$exportar <- downloadHandler(
      params = list(responsavel = nome(),
                    instituicao_do_responsavel = instituicao(),
                    pib_texto = pib_texto(),
+                   texto_pib_hiato = texto_pib_hiato(),
                    otica_produto_texto = otica_produto_texto(),
                    otica_demanda_texto = otica_demanda_texto())
    )

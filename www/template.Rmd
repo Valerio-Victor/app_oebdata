@@ -9,13 +9,12 @@ params:
   responsavel: ''
   instituicao_do_responsavel: ''
   pib_texto: ''
+  texto_pib_hiato: ''
   otica_produto_texto: ''
   otica_demanda_texto: ''
 ---
 
 ```{css, echo = F}
-
-
 #sidebar h2 {
     z-index: 200;
     background-color: #143e5e;
@@ -27,8 +26,6 @@ params:
     margin-top: 0px;
     margin-bottom: 0.809em;
 }
-
-
 #sidebar {
     position: fixed;
     top: 0;
@@ -40,8 +37,6 @@ params:
     z-index: 200;
     font-size: 16px;
 }
-
-
 #postamble {
     color: #fcfcfc;
     background: #143e5e;
@@ -51,32 +46,25 @@ params:
     z-index: 400;
     padding: 12px;
 }
-
-
 #sidebar a:hover {
     background-color: #143e5e;
     cursor: pointer;
 }
-
-
 h1, h2, h3, h4, h5, h6, legend {
     font-family: "Roboto Slab","ff-tisa-web-pro","Georgia",Arial,sans-serif;
     font-weight: 700;
     color: #143e5e;
 }
-
 h1.title, h1.title p {
   
   color: #fcfcfc;
   font-size: 1%;
-
 }
-
 
 ```
 
-```{r capa, echo = F, fig.align = 'center', out.width = '75%'}
-knitr::include_graphics(path = 'relatorio_capa.png')
+```{r in, echo=FALSE, width = '75%'}
+knitr::include_graphics('https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/relatorio_capa.png')
 ```
 
 # INTRODUÇÃO {-}
@@ -90,7 +78,13 @@ responsabilidade de **`r params$responsavel`**
 (**`r params$instituicao_do_responsavel`**).
 
 ```{r dados,include=FALSE, message=FALSE, warning=FALSE}
-resultados <- readRDS('../resultados.rds')
+url = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/resultados.rds'
+
+temp = tempfile()
+
+download.file(url, destfile = temp)
+
+resultado_temp = readRDS(temp)
 ```
 
 # PRODUTO INTERNO BRUTO 
@@ -99,86 +93,65 @@ resultados <- readRDS('../resultados.rds')
 
 `r params$pib_texto`
 
-## {.tabset}
 
-### PIB (Número Índice)
-
-```{r indice, echo=FALSE}
-resultados[['grafico_pib_indice']]
+```{r pib_indice, echo=FALSE}
+resultado_temp[['grafico_pib_indice']]
 ```
 
-### PIB (Variação no Número Índice)
 
-```{r indice_variacao, echo=FALSE}
-resultados[['grafico_var_pib_indice']]
+```{r pib_indice_var, echo=FALSE}
+resultado_temp[['grafico_var_pib_indice']]
 ```
 
-### PIB Efetivo x PIB Potencial
 
-```{r efetivo_potencial, echo=FALSE}
-resultados[['grafico_real_potencial']]
+# HIATO DO PRODUTO
+
+`r params$texto_pib_hiato`
+
+
+```{r real_potencial, echo=FALSE}
+resultado_temp[['grafico_real_potencial']]
 ```
 
-### Hiato do Produto
 
-```{r hiato, echo=FALSE}
-resultados[['grafico_hiato']]
+```{r hiato_pib, echo=FALSE}
+resultado_temp[['grafico_hiato']]
 ```
 
-### PIB (Valores Reais)
 
-```{r valores, echo=FALSE}
-resultados[['tabela_pib_vc']]
-```
-
-# ÓTICA DO PRODUTO 
-
-<div style="text-align: justify">
+# ÓTICA DO PRODUTO
 
 `r params$otica_produto_texto`
 
-## {.tabset}
-
-### PIB Setorial (Número Índice)
-
-```{r setores, echo=FALSE}
-resultados[['grafico_pib_setores_indice']]
+```{r pib_setores, echo=FALSE}
+resultado_temp[['grafico_pib_setores_indice']]
 ```
 
-### PIB Setorial (Variação no Número Índice)
 
-```{r variacao_setores, echo=FALSE}
-resultados[['grafico_var_pib_setores_indice']]
+```{r var_pib_setores, echo=FALSE}
+resultado_temp[['grafico_var_pib_setores_indice']]
 ```
 
-### PIB Setorial (valores)
-
-```{r valores_setores, echo=FALSE}
-resultados[['tabela_pib_setores_vc']]
-```
-
-# ÓTICA DA DEMANDA {.tabset}
-
-<div style="text-align: justify">
+# ÓTICA DA DEMANDA
 
 `r params$otica_demanda_texto`
 
-## {.tabset}
-
-### DA (Número Índice)
-
-```{r demanda, echo=FALSE}
-resultados[['grafico_pib_demanda_indice']]
+```{r pib_demanda, echo=FALSE}
+resultado_temp[['grafico_pib_demanda_indice']]
 ```
 
-### DA (Variação no Número Índice)
 
-```{r variacao_demanda, echo=FALSE}
-resultados[['grafico_var_pib_demanda_indice']]
+```{r var_pib_demanda, echo=FALSE}
+resultado_temp[['grafico_var_pib_demanda_indice']]
 ```
 
-### DA (valores)
 
-```{r valores_demanda, echo=FALSE}
-resultados[['tabela_pib_demanda_vc']]
-```
+
+
+
+
+
+
+
+
+
