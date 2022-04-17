@@ -2,34 +2,29 @@
 #-------------------------------------------PACOTES-------------------------------------------------
 #---------------------------------------------------------------------------------------------------
 library(shiny)
-
-
 library(shinydashboard)
-
-
 library(plotly)
-
-
 library(reactable)
-
-
 library(rmarkdown)
-
-
 library(magrittr, include.only = '%>%')
-
-
 library(rlang)
-
-
 library(htmltools)
 
 
-url = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/resultados.rds'
+#---------------------------------------------------------------------------------------------------
+#-----------------------------------ARQUIVOS TEMPORÁRIOS--------------------------------------------
+#---------------------------------------------------------------------------------------------------
+url_total = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/resultados_total'
+url_nivel_atividade = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/resultados_nivel_atividade.rds'
+url_setor_externo = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/resultados_setor_externo.rds'
 
-temporario = tempfile()
+temporario_total = tempfile()
+temporario_nivel_atividade = tempfile()
+temporario_setor_externo = tempfile()
 
-download.file(url, destfile = temporario)
+download.file(url_total, destfile = temporario_total)
+download.file(url_nivel_atividade, destfile = temporario_nivel_atividade)
+download.file(url_setor_externo, destfile = temporario_setor_externo)
 #---------------------------------------------------------------------------------------------------
 #--------------------------------------------UI-----------------------------------------------------
 #---------------------------------------------------------------------------------------------------
@@ -37,22 +32,33 @@ ui <- dashboardPage(
 
 title = 'OEB-Data', skin = 'blue',
 
-dashboardHeader(titleWidth = 280, title = span(tagList(icon('sitemap'), '  OEB Data'))),
+dashboardHeader(titleWidth = 280, title = span(tagList(icon('sitemap'), '  OEB-Data'))),
 
 dashboardSidebar(width = 280,
 
 #---------------------------------------------------------------------------------------------------
-#---------------------------------------TÍTULO DO APP-----------------------------------------------
+#---------------------------------------MENU DO APP-------------------------------------------------
 #---------------------------------------------------------------------------------------------------
 sidebarMenu(
-
-menuItem('CONJUNTURA ECONÔMICA', tabName = 'orientacao', icon = icon('area-chart'),
-  menuSubItem('Relatório de Conjuntura', tabName = 'conjuntura_total', icon = icon('file-text-o'))
+menuItem('', tabName = 'quemsomos'),
+menuItem('CONJUNTURA ECONÔMICA', tabName = 'macro', icon = icon('chart-area'),
+menuSubItem('Relatório de Conjuntura',
+              tabName = 'conjuntura_total',
+              icon = icon('file-alt')
+),
+menuSubItem('Caderno de Nível de Atividade',
+tabName = 'nivel_atividade',
+icon = icon('file-alt')
+),
+menuSubItem('Caderno de Setor Externo',
+            tabName = 'setor_externo',
+            icon = icon('file-alt')
+)
 ),
 
 hr(),
 
-div(style = 'text-align:center', 'Versão 1.0.0')
+div(style = 'text-align:center', 'Versão 3.0.1')
 
 )
 
@@ -65,105 +71,147 @@ dashboardBody(
 
 tabItems(
 
-# CONJUNTURA ECONÔMICA------------------------------------------------------------------------------
-tabItem(tabName = 'conjuntura_total',
-fluidRow(
-  column(width = 8,
-         box(
-           title = strong('PARTE I - INSERIR DADOS DO ANALISTA'),
-           width = 12,
-           status = 'primary',
-           background = 'light-blue',
-           solidHeader = FALSE,
-           collapsible = FALSE,
-           closable = FALSE,
-           fluidRow(column(width = 12, textInput('nome_responsavel',
-                                                 label = h4('Analista Responsável:'),
-                                                 value = 'Insira o seu nome...'))),
-           fluidRow(column(width = 12, textInput('inst_responsavel',
-                                                 label = h4('Instituição do Analista:'),
-                                                 value = 'Insira o nome de sua instituição...')))
-         )
-  ),
-  column(width = 4,
-         fluidRow(
-           box(
-             title = strong('PARTE II - INICIAR ANÁLISE DOS DADOS'),
-             width = 12,
-             status = 'primary',
-             background = 'light-blue',
-             solidHeader = FALSE,
-             collapsible = FALSE,
-             closable = FALSE,
-             fluidRow(column(width = 12, actionButton(inputId = 'iniciar', label = 'Importar os Dados'))),
-             br()
-           )
-         ),
-         fluidRow(
-           box(
-             title = strong('PARTE III - EXPORTAR ANÁLISE DOS DADOS'),
-             width = 12,
-             status = 'primary',
-             background = 'light-blue',
-             solidHeader = FALSE,
-             collapsible = FALSE,
-             closable = FALSE,
-             fluidRow(column(width = 12, downloadButton('exportar', label = 'Exportar Relatório'))),
-             br()
-           )
-         )
-  )
-),
 
+#---------------------------------------------------------------------------------------------------
+#-------------------------------------CONJUNTURA TOTAL----------------------------------------------
+#---------------------------------------------------------------------------------------------------
+tabItem(tabName = 'conjuntura_total',
+
+
+fluidRow(
+column(width = 8,
+box(
+title = strong('PARTE I - INSERIR DADOS DO ANALISTA'),
+width = 12,
+status = 'primary',
+background = 'light-blue',
+solidHeader = FALSE,
+collapsible = FALSE,
+closable = FALSE,
+fluidRow(
+column(width = 12, textInput(inputId = 'nome_responsavel_total',
+                             label = h4('Analista Responsável:'),
+                             value = 'Insira o seu nome...')
+)
+),
+fluidRow(
+column(width = 12, textInput(inputId = 'inst_responsavel_total',
+                             label = h4('Instituição do Analista:'),
+                             value = 'Insira o nome de sua instituição...')
+)
+)
+)
+),
+column(width = 4,
+fluidRow(
+box(
+title = strong('PARTE II - INICIAR ANÁLISE DOS DADOS'),
+width = 12,
+status = 'primary',
+background = 'light-blue',
+solidHeader = FALSE,
+collapsible = FALSE,
+closable = FALSE,
+fluidRow(
+column(width = 12, actionButton(inputId = 'iniciar_total',
+                                label = 'Importar os Dados')
+)
+),
+br()
+)
+),
+fluidRow(
+box(
+title = strong('PARTE III - EXPORTAR ANÁLISE DOS DADOS'),
+width = 12,
+status = 'primary',
+background = 'light-blue',
+solidHeader = FALSE,
+collapsible = FALSE,
+closable = FALSE,
+fluidRow(
+column(width = 12, downloadButton(outputId = 'exportar_total',
+                                  label = 'Exportar Relatório')
+)
+),
+br()
+)
+)
+)
+),
 
 div(style = 'text-align: center; color: #3c8dbc',
     h1('PRODUTO INTERNO BRUTO')),
 
-
 fluidRow(
-  box(title = '',
-      width = 12,
-      status = 'primary',
-      solidHeader = TRUE,
-      collapsible = FALSE,
-      collapsed = FALSE,
-      fluidRow(
-        column(width = 7,
-               fluidRow(column(width = 12, plotly::plotlyOutput('grafico_pib_indice'))),
-               fluidRow(column(width = 12, plotly::plotlyOutput('grafico_var_pib_indice')))),
-        column(width = 5, reactable::reactableOutput('tabela_pib_vc', height = '763px'))
-        ),
-      fluidRow(column(width = 12,
-                      box(title = 'Análise',
-                          width = 12,
-                          status = 'primary',
-                          solidHeader = TRUE,
-                          collapsible = FALSE,
-                          collapsed = FALSE,
-                          fluidRow(column(width = 12, textAreaInput('texto_pib',
-                                                                    label = h4(''),
-                                                                    value = 'Insira aqui a sua análise...',
-                                                                    width = '100%',
-                                                                    rows = 5,
-                                                                    resize = 'vertical')))))
-      ),
-      fluidRow(column(width = 6, plotly::plotlyOutput('grafico_real_potencial')),
-               column(width = 6, plotly::plotlyOutput('grafico_hiato'))),
-      fluidRow(column(width = 12,
-                      box(title = 'Análise',
-                          width = 12,
-                          status = 'primary',
-                          solidHeader = TRUE,
-                          collapsible = FALSE,
-                          collapsed = FALSE,
-                          fluidRow(column(width = 12, textAreaInput('texto_pib_hiato',
-                                                                    label = h4(''),
-                                                                    value = 'Insira aqui a sua análise...',
-                                                                    width = '100%',
-                                                                    rows = 5,
-                                                                    resize = 'vertical')))))
-      )
-  )
+box(
+title = '',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 7,
+fluidRow(
+column(width = 12, plotly::plotlyOutput(outputId = 'grafico_pib_indice_total'))
+),
+fluidRow(
+column(width = 12, plotly::plotlyOutput(outputId = 'grafico_var_pib_indice_total'))
+)
+),
+column(width = 5,
+       reactable::reactableOutput(outputId = 'tabela_pib_vc_total',
+                                  height = '763px')
+)
+),
+fluidRow(
+column(width = 12,
+box(
+title = 'ANÁLISE SOBRE O PRODUTO INTERNO BRUTO:',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12, textAreaInput(inputId = 'texto_pib_total',
+                                 label = '',
+                                 value = 'Insira aqui a sua análise...',
+                                 width = '100%',
+                                 rows = 5,
+                                 resize = 'vertical')
+)
+)
+)
+)
+),
+fluidRow(
+column(width = 6, plotly::plotlyOutput(outputId = 'grafico_real_potencial_total')),
+column(width = 6, plotly::plotlyOutput(outputId = 'grafico_hiato_total'))
+),
+fluidRow(
+column(width = 12,
+box(
+title = 'ANÁLISE SOBRE O HIATO DO PRODUTO:',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12, textAreaInput(inputId = 'texto_pib_hiato_total',
+                                 label = '',
+                                 value = 'Insira aqui a sua análise...',
+                                 width = '100%',
+                                 rows = 5,
+                                 resize = 'vertical')
+)
+)
+)
+)
+)
+)
 ),
 
 
@@ -172,33 +220,49 @@ div(style = 'text-align: center; color: #3c8dbc',
 
 
 fluidRow(
-  box(title = '',
-      width = 12,
-      status = 'primary',
-      solidHeader = TRUE,
-      collapsible = FALSE,
-      collapsed = FALSE,
-      fluidRow(
-        column(width = 7,
-               fluidRow(column(width = 12, plotly::plotlyOutput('grafico_pib_setores_indice'))),
-               fluidRow(column(width = 12, plotly::plotlyOutput('grafico_var_pib_setores_indice')))),
-        column(width = 5, reactable::reactableOutput('tabela_pib_setores_vc', height = '763px'))
-      ),
-      fluidRow(column(width = 12,
-      box(title = 'Análise',
-          width = 12,
-          status = 'primary',
-          solidHeader = TRUE,
-          collapsible = FALSE,
-          collapsed = FALSE,
-          fluidRow(column(width = 12, textAreaInput('texto_otica_produto',
-                                                    label = h4(''),
-                                                    value = 'Insira aqui a sua análise...',
-                                                    width = '100%',
-                                                    rows = 5,
-                                                    resize = 'vertical')))))
-      )
-  )
+box(
+title = '',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 7,
+fluidRow(
+column(width = 12, plotly::plotlyOutput(outputId = 'grafico_pib_setores_indice_total'))
+),
+fluidRow(
+column(width = 12, plotly::plotlyOutput(outputId = 'grafico_var_pib_setores_indice_total'))
+)
+),
+column(width = 5,
+       reactable::reactableOutput(outputId = 'tabela_pib_setores_vc_total',
+                                  height = '763px')
+)
+),
+fluidRow(
+column(width = 12,
+box(
+title = 'ANÁLISE PELA ÓTICA DO PRODUTO:',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12, textAreaInput(inputId = 'texto_otica_produto_total',
+                                 label = '',
+                                 value = 'Insira aqui a sua análise...',
+                                 width = '100%',
+                                 rows = 5,
+                                 resize = 'vertical')
+)
+)
+)
+)
+)
+)
 ),
 
 
@@ -207,37 +271,665 @@ div(style = 'text-align: center; color: #3c8dbc',
 
 
 fluidRow(
-  box(title = '',
-      width = 12,
-      status = 'primary',
-      solidHeader = TRUE,
-      collapsible = FALSE,
-      collapsed = FALSE,
-      fluidRow(
-        column(width = 7,
-               fluidRow(column(width = 12, plotly::plotlyOutput('grafico_pib_demanda_indice'))),
-               fluidRow(column(width = 12, plotly::plotlyOutput('grafico_var_pib_demanda_indice')))),
-        column(width = 5, reactable::reactableOutput('tabela_pib_demanda_vc', height = '763px'))
-      ),
-      fluidRow(column(width = 12,
-      box(title = 'Análise',
-          width = 12,
-          status = 'primary',
-          solidHeader = TRUE,
-          collapsible = FALSE,
-          collapsed = FALSE,
-          fluidRow(column(width = 12, textAreaInput('texto_otica_demanda',
-                                                    label = h4(''),
-                                                    value = 'Insira aqui a sua análise...',
-                                                    width = '100%',
-                                                    rows = 5,
-                                                    resize = 'vertical')))))
-      )
-  )
+box(
+title = '',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 7,
+fluidRow(
+column(width = 12, plotly::plotlyOutput(outputId = 'grafico_pib_demanda_indice_total'))
+),
+fluidRow(
+column(width = 12, plotly::plotlyOutput(outputId = 'grafico_var_pib_demanda_indice_total'))
+)
+),
+column(width = 5,
+       reactable::reactableOutput(outputId = 'tabela_pib_demanda_vc_total',
+                                  height = '763px')
+)
+),
+fluidRow(
+column(width = 12,
+box(
+title = 'ANÁLISE PELA ÓTICA DA DEMANDA:',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12, textAreaInput(inputId = 'texto_otica_demanda_total',
+                                 label = '',
+                                 value = 'Insira aqui a sua análise...',
+                                 width = '100%',
+                                 rows = 5,
+                                 resize = 'vertical')
+)
+)
+)
+)
+)
+)
+)
+
+),
+
+
+#---------------------------------------------------------------------------------------------------
+#---------------------------------------NÍVEL DE ATIVIDADE------------------------------------------
+#---------------------------------------------------------------------------------------------------
+tabItem(tabName = 'nivel_atividade',
+
+
+fluidRow(
+column(width = 8,
+box(
+title = strong('PARTE I - INSERIR DADOS DO ANALISTA'),
+width = 12,
+status = 'primary',
+background = 'light-blue',
+solidHeader = FALSE,
+collapsible = FALSE,
+closable = FALSE,
+fluidRow(
+column(width = 12, textInput(inputId = 'nome_responsavel_nivel_atividade',
+                             label = h4('Analista Responsável:'),
+                             value = 'Insira o seu nome...')
+)
+),
+fluidRow(
+column(width = 12, textInput(inputId = 'inst_responsavel_nivel_atividade',
+                             label = h4('Instituição do Analista:'),
+                             value = 'Insira o nome de sua instituição...')
+)
+)
+)
+),
+column(width = 4,
+fluidRow(
+box(
+title = strong('PARTE II - INICIAR ANÁLISE DOS DADOS'),
+width = 12,
+status = 'primary',
+background = 'light-blue',
+solidHeader = FALSE,
+collapsible = FALSE,
+closable = FALSE,
+fluidRow(
+column(width = 12, actionButton(inputId = 'iniciar_nivel_atividade',
+                                label = 'Importar os Dados')
+)
+),
+br()
+)
+),
+fluidRow(
+box(
+title = strong('PARTE III - EXPORTAR ANÁLISE DOS DADOS'),
+width = 12,
+status = 'primary',
+background = 'light-blue',
+solidHeader = FALSE,
+collapsible = FALSE,
+closable = FALSE,
+fluidRow(
+column(width = 12, downloadButton(outputId = 'exportar_nivel_atividade',
+label = 'Exportar Relatório')
+)
+),
+br()
+)
+)
+)
+),
+
+div(style = 'text-align: center; color: #3c8dbc',
+h1('PRODUTO INTERNO BRUTO')),
+
+fluidRow(
+box(
+title = '',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 7,
+fluidRow(
+column(width = 12, plotly::plotlyOutput(outputId = 'grafico_pib_indice_nivel_atividade'))
+),
+fluidRow(
+column(width = 12, plotly::plotlyOutput(outputId = 'grafico_var_pib_indice_nivel_atividade'))
+)
+),
+column(width = 5,
+       reactable::reactableOutput(outputId = 'tabela_pib_vc_nivel_atividade',
+                                    height = '763px')
+)
+),
+fluidRow(
+column(width = 12,
+box(
+title = 'ANÁLISE SOBRE O PRODUTO INTERNO BRUTO:',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12, textAreaInput(inputId = 'texto_pib_nivel_atividade',
+                                 label = '',
+                                 value = 'Insira aqui a sua análise...',
+                                 width = '100%',
+                                 rows = 5,
+                                 resize = 'vertical')
+)
+)
+)
+)
+),
+fluidRow(
+column(width = 6, plotly::plotlyOutput(outputId = 'grafico_real_potencial_nivel_atividade')),
+column(width = 6, plotly::plotlyOutput(outputId = 'grafico_hiato_nivel_atividade'))
+),
+fluidRow(
+column(width = 12,
+box(
+title = 'ANÁLISE SOBRE O HIATO DO PRODUTO:',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12, textAreaInput(inputId = 'texto_pib_hiato_nivel_atividade',
+                                 label = '',
+                                 value = 'Insira aqui a sua análise...',
+                                 width = '100%',
+                                 rows = 5,
+                                 resize = 'vertical')
+)
+)
+)
+)
+)
+)
+),
+
+
+div(style = 'text-align: center; color: #3c8dbc',
+    h1('ÓTICA DO PRODUTO')),
+
+
+fluidRow(
+box(
+title = '',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 7,
+fluidRow(
+column(width = 12, plotly::plotlyOutput(outputId = 'grafico_pib_setores_indice_nivel_atividade'))
+),
+fluidRow(
+column(width = 12, plotly::plotlyOutput(outputId = 'grafico_var_pib_setores_indice_nivel_atividade'))
+)
+),
+column(width = 5,
+       reactable::reactableOutput(outputId = 'tabela_pib_setores_vc_nivel_atividade',
+                                  height = '763px')
+)
+),
+fluidRow(
+column(width = 12,
+box(
+title = 'ANÁLISE PELA ÓTICA DO PRODUTO:',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12, textAreaInput(inputId = 'texto_otica_produto_nivel_atividade',
+                                 label = '',
+                                 value = 'Insira aqui a sua análise...',
+                                 width = '100%',
+                                 rows = 5,
+                                 resize = 'vertical')
+)
+)
+)
+)
+)
+)
+),
+
+
+div(style = 'text-align: center; color: #3c8dbc',
+    h1('ÓTICA DA DEMANDA')),
+
+
+fluidRow(
+box(
+title = '',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 7,
+fluidRow(
+column(width = 12, plotly::plotlyOutput(outputId = 'grafico_pib_demanda_indice_nivel_atividade'))
+),
+fluidRow(
+column(width = 12, plotly::plotlyOutput(outputId = 'grafico_var_pib_demanda_indice_nivel_atividade'))
+)
+),
+column(width = 5,
+       reactable::reactableOutput(outputId = 'tabela_pib_demanda_vc_nivel_atividade',
+                                  height = '763px')
+)
+),
+fluidRow(
+column(width = 12,
+box(
+title = 'ANÁLISE PELA ÓTICA DA DEMANDA:',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12, textAreaInput(inputId = 'texto_otica_demanda_nivel_atividade',
+                                 label = '',
+                                 value = 'Insira aqui a sua análise...',
+                                 width = '100%',
+                                 rows = 5,
+                                 resize = 'vertical')
+)
+)
+)
+)
+)
+)
+)
+
+),
+
+
+#---------------------------------------------------------------------------------------------------
+#------------------------------------------SETOR EXTERNO--------------------------------------------
+#---------------------------------------------------------------------------------------------------
+tabItem(tabName = 'setor_externo',
+
+fluidRow(
+column(width = 8,
+box(
+title = strong('PARTE I - INSERIR DADOS DO ANALISTA'),
+width = 12,
+status = 'primary',
+background = 'light-blue',
+solidHeader = FALSE,
+collapsible = FALSE,
+closable = FALSE,
+fluidRow(
+column(width = 12, textInput(inputId = 'nome_responsavel_setor_externo',
+                             label = h4('Analista Responsável:'),
+                             value = 'Insira o seu nome...')
+)
+),
+fluidRow(
+column(width = 12, textInput(inputId = 'inst_responsavel_setor_externo',
+                             label = h4('Instituição do Analista:'),
+                             value = 'Insira o nome de sua instituição...')
+)
+)
+)
+),
+column(width = 4,
+fluidRow(
+box(
+title = strong('PARTE II - INICIAR ANÁLISE DOS DADOS'),
+width = 12,
+status = 'primary',
+background = 'light-blue',
+solidHeader = FALSE,
+collapsible = FALSE,
+closable = FALSE,
+fluidRow(
+column(width = 12, actionButton(inputId = 'iniciar_setor_externo',
+                                label = 'Importar os dados')
+)
+),
+br()
+)
+),
+fluidRow(
+box(
+title = strong('PARTE III - EXPORTAR ANÁLISE DOS DADOS'),
+width = 12,
+status = 'primary',
+background = 'light-blue',
+solidHeader = FALSE,
+collapsible = FALSE,
+closable = FALSE,
+fluidRow(
+column(width = 12, downloadButton(outputId = 'exportar_setor_externo',
+                                  label = 'Exportar Relatório')
+)
+),
+br()
+)
+)
+)
+),
+
+div(style = 'text-align: center; color: #3c8dbc',
+            h1('TAXA DE CÂMBIO')),
+
+fluidRow(
+box(
+title = '',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 6,
+fluidRow(
+column(width = 12,
+       plotly::plotlyOutput(outputId = 'grafico_nominal_dolar_setor_externo')
+)
+)
+),
+column(width = 6,
+fluidRow(
+column(width = 12,
+       plotly::plotlyOutput(outputId = 'grafico_var_nominal_dolar_setor_externo')
+)
+)
+)
+),
+fluidRow(
+column(width = 6,
+fluidRow(
+column(width = 12,
+       plotly::plotlyOutput(outputId = 'grafico_real_dolar_setor_externo')
+)
+)
+),
+column(width = 6,
+fluidRow(
+column(width = 12,
+       plotly::plotlyOutput(outputId = 'grafico_var_real_dolar_setor_externo')
+)
+)
+)
+),
+fluidRow(
+column(width = 12,
+box(
+title = 'ANÁLISE DA TAXA DE CÂMBIO (REAL/DÓLAR):',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12, textAreaInput(inputId = 'texto_dolar_setor_externo',
+                                 label = h4(''),
+                                 value = 'Insira aqui a sua análise...',
+                                 width = '100%',
+                                 rows = 5,
+                                 resize = 'vertical')
+)
+)
+)
+)
+),
+fluidRow(
+column(width = 6,
+fluidRow(
+column(width = 12,
+       plotly::plotlyOutput(outputId = 'grafico_nominal_euro_setor_externo')
+)
+)
+),
+column(width = 6,
+fluidRow(
+column(width = 12,
+       plotly::plotlyOutput(outputId = 'grafico_var_nominal_euro_setor_externo')
+)
+)
+)
+),
+fluidRow(
+column(width = 6,
+fluidRow(
+column(width = 12,
+       plotly::plotlyOutput(outputId = 'grafico_real_euro_setor_externo')
+)
+)
+),
+column(width = 6,
+fluidRow(
+column(width = 12,
+       plotly::plotlyOutput(outputId = 'grafico_var_real_euro_setor_externo')
+)
+)
+)
+),
+fluidRow(
+column(width = 12,
+box(
+title = 'ANÁLISE DA TAXA DE CÂMBIO (REAL/EURO):',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12, textAreaInput(inputId = 'texto_euro_setor_externo',
+                                 label = h4(''),
+                                 value = 'Insira aqui a sua análise...',
+                                 width = '100%',
+                                 rows = 5,
+                                 resize = 'vertical')
+)
+)
+)
+)
+)
+)
+),
+
+
+div(style = 'text-align: center; color: #3c8dbc',
+    h1('BALANÇO DE PAGAMENTOS')),
+
+
+fluidRow(
+box(
+title = '',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 6,
+fluidRow(
+column(width = 12,
+       plotly::plotlyOutput(outputId = 'grafico_saldo_tc_setor_externo')
+)
+)
+),
+column(width = 6,
+fluidRow(
+column(width = 12,
+       plotly::plotlyOutput(outputId = 'grafico_tc_pib_setor_externo')
+)
+)
+)
+),
+fluidRow(
+column(width = 12,
+box(
+title = 'ANÁLISE DO SALDO EM TRANSAÇÕES CORRENTES:',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12, textAreaInput(inputId = 'texto_tc_setor_externo',
+                                 label = h4(''),
+                                 value = 'Insira aqui a sua análise...',
+                                 width = '100%',
+                                 rows = 5,
+                                 resize = 'vertical')
+)
+)
+)
+)
+),
+fluidRow(
+column(width = 6,
+fluidRow(
+column(width = 12,
+       plotly::plotlyOutput(outputId = 'grafico_saldo_cf_setor_externo')
+)
+)
+),
+column(width = 6,
+fluidRow(
+column(width = 12,
+       plotly::plotlyOutput(outputId = 'grafico_id_pib_setor_externo')
+)
+)
+)
+),
+fluidRow(
+column(width = 12,
+box(
+title = 'ANÁLISE DA CONTA FINANCEIRA:',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12, textAreaInput(inputId = 'texto_cf_setor_externo',
+                                 label = h4(''),
+                                 value = 'Insira aqui a sua análise...',
+                                 width = '100%',
+                                 rows = 5,
+                                 resize = 'vertical')
+)
+)
+)
+)
+)
+)
+),
+
+
+div(style = 'text-align: center; color: #3c8dbc',
+    h1('RESERVAS INTERNACIONAIS')),
+
+
+fluidRow(
+box(
+title = '',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12,
+fluidRow(
+column(width = 12,
+       plotly::plotlyOutput(outputId = 'grafico_r_i_setor_externo')
+)
+)
+),
+),
+fluidRow(
+column(width = 12,
+box(
+title = 'ANÁLISE DO ESTOQUE EM RESERVAS INTERNACIONAIS:',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12, textAreaInput(inputId = 'texto_reservas_setor_externo',
+                                 label = h4(''),
+                                 value = 'Insira aqui a sua análise...',
+                                 width = '100%',
+                                 rows = 5,
+                                 resize = 'vertical')
+)
+)
+)
+)
+)
+)
+)
 )
 
 
-)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 )
 )
 )
@@ -251,7 +943,7 @@ server <- function(input, output, session) {
 
 
 # Importação dos Dados ---------------------------------------------------------
-observeEvent(input$iniciar, {
+observeEvent(input$iniciar_setor_externo, {
 
 
 
@@ -271,81 +963,175 @@ Sys.sleep(3)
 
 })
 
-resultados <- readRDS(temporario)
+resultados_setor_externo <- readRDS(temporario_setor_externo)
 
-output$grafico_pib_indice <- plotly::renderPlotly(
-  resultados[['grafico_pib_indice']]
+output$grafico_nominal_dolar_setor_externo <- plotly::renderPlotly(
+  resultados_setor_externo[['grafico_nominal_dolar']]
 )
 
-output$grafico_var_pib_indice <- plotly::renderPlotly(
-  resultados[['grafico_var_pib_indice']]
+output$grafico_var_nominal_dolar_setor_externo <- plotly::renderPlotly(
+  resultados_setor_externo[['grafico_var_nominal_dolar']]
 )
 
-output$tabela_pib_vc <- reactable::renderReactable(
-  resultados[['tabela_pib_vc']]
+output$grafico_real_dolar_setor_externo <- plotly::renderPlotly(
+  resultados_setor_externo[['grafico_real_dolar']]
 )
 
-output$grafico_real_potencial <- plotly::renderPlotly(
-  resultados[['grafico_real_potencial']]
+output$grafico_var_real_dolar_setor_externo <- plotly::renderPlotly(
+  resultados_setor_externo[['grafico_var_real_dolar']]
 )
 
-output$grafico_hiato <- plotly::renderPlotly(
-  resultados[['grafico_hiato']]
+output$grafico_nominal_euro_setor_externo <- plotly::renderPlotly(
+  resultados_setor_externo[['grafico_nominal_euro']]
 )
 
-output$grafico_pib_setores_indice <- plotly::renderPlotly(
-  resultados[['grafico_pib_setores_indice']]
+output$grafico_var_nominal_euro_setor_externo <- plotly::renderPlotly(
+  resultados_setor_externo[['grafico_var_nominal_euro']]
 )
 
-output$grafico_var_pib_setores_indice <- plotly::renderPlotly(
-  resultados[['grafico_var_pib_setores_indice']]
+output$grafico_real_euro_setor_externo <- plotly::renderPlotly(
+  resultados_setor_externo[['grafico_real_euro']]
 )
 
-output$tabela_pib_setores_vc <- reactable::renderReactable(
-  resultados[['tabela_pib_setores_vc']]
+output$grafico_var_real_euro_setor_externo <- plotly::renderPlotly(
+  resultados_setor_externo[['grafico_var_real_euro']]
 )
 
-output$grafico_pib_demanda_indice <- plotly::renderPlotly(
-  resultados[['grafico_pib_demanda_indice']]
+output$grafico_saldo_tc_setor_externo <- plotly::renderPlotly(
+  resultados_setor_externo[['grafico_saldo_tc']]
 )
 
-output$grafico_var_pib_demanda_indice <- plotly::renderPlotly(
-  resultados[['grafico_var_pib_demanda_indice']]
+output$grafico_tc_pib_setor_externo <- plotly::renderPlotly(
+  resultados_setor_externo[['grafico_tc_pib']]
 )
 
-output$tabela_pib_demanda_vc <- reactable::renderReactable(
-  resultados[['tabela_pib_demanda_vc']]
+output$grafico_saldo_cf_setor_externo <- plotly::renderPlotly(
+  resultados_setor_externo[['grafico_saldo_cf']]
+)
+
+output$grafico_id_pib_setor_externo <- plotly::renderPlotly(
+  resultados_setor_externo[['grafico_id_pib']]
+)
+
+output$grafico_r_i_setor_externo <- plotly::renderPlotly(
+  resultados_setor_externo[['grafico_r_i']]
 )
 
 })
 
-nome <- reactive(input$nome_responsavel)
-
-instituicao <- reactive(input$inst_responsavel)
-
-pib_texto <- reactive(input$texto_pib)
-
-texto_pib_hiato <- reactive(input$texto_pib_hiato)
-
-otica_produto_texto <- reactive(input$texto_otica_produto)
-
-otica_demanda_texto <- reactive(input$texto_otica_demanda)
-
-output$exportar <- downloadHandler(
+# nome <- reactive(input$nome_responsavel)
+#
+# instituicao <- reactive(input$inst_responsavel)
+#
+# pib_texto <- reactive(input$texto_pib)
+#
+# texto_pib_hiato <- reactive(input$texto_pib_hiato)
+#
+# otica_produto_texto <- reactive(input$texto_otica_produto)
+#
+# otica_demanda_texto <- reactive(input$texto_otica_demanda)
+#
+output$exportar_total <- downloadHandler(
   filename = 'relatorio_conjuntura_oeb.html',
   content = function(file) {
    rmarkdown::render(
-     input = 'www/template.Rmd',
-     output_file = file,
-     params = list(responsavel = nome(),
-                   instituicao_do_responsavel = instituicao(),
-                   pib_texto = pib_texto(),
-                   texto_pib_hiato = texto_pib_hiato(),
-                   otica_produto_texto = otica_produto_texto(),
-                   otica_demanda_texto = otica_demanda_texto())
+     input = 'www/template_conjuntura.Rmd',
+     output_file = file
    )
   }
 )
+#
+#
+# # Importação dos Dados ---------------------------------------------------------
+# observeEvent(input$iniciar, {
+#
+#
+#
+#   withProgress(message = 'Iniciando a análise...', value = 0.1, {
+#
+#     Sys.sleep(1)
+#
+#     incProgress(0.9)
+#
+#     incProgress(1, message = 'Importando os dados...')
+#
+#     Sys.sleep(1)
+#
+#     incProgress(7, message = 'Aguarde, mesmo após a barra de progresso desaparecer há processamento de dados!')
+#
+#     Sys.sleep(3)
+#
+#   })
+#
+#   resultados <- readRDS(temporario)
+#
+#   output$grafico_pib_indice <- plotly::renderPlotly(
+#     resultados[['grafico_pib_indice']]
+#   )
+#
+#   output$grafico_var_pib_indice <- plotly::renderPlotly(
+#     resultados[['grafico_var_pib_indice']]
+#   )
+#
+#   output$tabela_pib_vc <- reactable::renderReactable(
+#     resultados[['tabela_pib_vc']]
+#   )
+#
+#   output$grafico_real_potencial <- plotly::renderPlotly(
+#     resultados[['grafico_real_potencial']]
+#   )
+#
+#   output$grafico_hiato <- plotly::renderPlotly(
+#     resultados[['grafico_hiato']]
+#   )
+#
+#   output$grafico_pib_setores_indice <- plotly::renderPlotly(
+#     resultados[['grafico_pib_setores_indice']]
+#   )
+#
+#   output$grafico_var_pib_setores_indice <- plotly::renderPlotly(
+#     resultados[['grafico_var_pib_setores_indice']]
+#   )
+#
+#   output$tabela_pib_setores_vc <- reactable::renderReactable(
+#     resultados[['tabela_pib_setores_vc']]
+#   )
+#
+#   output$grafico_pib_demanda_indice <- plotly::renderPlotly(
+#     resultados[['grafico_pib_demanda_indice']]
+#   )
+#
+#   output$grafico_var_pib_demanda_indice <- plotly::renderPlotly(
+#     resultados[['grafico_var_pib_demanda_indice']]
+#   )
+#
+#   output$tabela_pib_demanda_vc <- reactable::renderReactable(
+#     resultados[['tabela_pib_demanda_vc']]
+#   )
+#
+#   output$grafico_saldo_tc <- plotly::renderPlotly(
+#     resultados[['grafico_saldo_tc']]
+#   )
+#
+#   output$grafico_tc_pib <- reactable::renderReactable(
+#     resultados[['grafico_tc_pib']]
+#   )
+#
+#   output$grafico_pib_demanda_indice <- plotly::renderPlotly(
+#     resultados[['grafico_saldo_cf']]
+#   )
+#
+#   output$grafico_var_pib_demanda_indice <- plotly::renderPlotly(
+#     resultados[['grafico_id_pib']]
+#   )
+#
+#   output$tabela_pib_demanda_vc <- reactable::renderReactable(
+#     resultados[['grafico_r_i']]
+#   )
+#
+# })
+
+
 
 
 

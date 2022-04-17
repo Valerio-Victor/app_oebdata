@@ -1,0 +1,11 @@
+name: testetab_outrodoc
+title:
+username:
+account: oeb-data
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6105184
+bundleId: 5805821
+url: https://oeb-data.shinyapps.io/testetab_outrodoc/
+when: 1650154425.18038
+lastSyncTime: 1650154425.18038

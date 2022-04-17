@@ -1,0 +1,11 @@
+name: relatorio_conjuntura
+title:
+username:
+account: oeb-data
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6062410
+bundleId: 5785871
+url: https://oeb-data.shinyapps.io/relatorio_conjuntura/
+when: 1649668767.49376
+lastSyncTime: 1649668767.49376

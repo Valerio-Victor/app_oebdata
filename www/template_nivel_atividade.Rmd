@@ -1,0 +1,119 @@
+---
+title: 'Relatório de Conjuntura Macroeconômica'
+subtitle: ''
+date: "`r format(Sys.Date(), '%d-%m-%Y')`"
+output:
+  rmdformats::readthedown:
+    highlight: kate
+params:
+  responsavel: ''
+  instituicao_do_responsavel: ''
+---
+
+```{css, echo = F}
+#sidebar h2 {
+    z-index: 200;
+    background-color: #143e5e;
+    text-align: center;
+    padding: 0.809em;
+    display: block;
+    color: #fcfcfc;
+    font-size: 100%;
+    margin-top: 0px;
+    margin-bottom: 0.809em;
+}
+#sidebar {
+    position: fixed;
+    top: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #00253d;
+    z-index: 200;
+    font-size: 16px;
+}
+#postamble {
+    color: #fcfcfc;
+    background: #143e5e;
+    border-top: solid 10px #00253d;
+    font-family: "Lato","proxima-nova","Helvetica Neue",Arial,sans-serif;
+    font-size: 90%;
+    z-index: 400;
+    padding: 12px;
+}
+#sidebar a:hover {
+    background-color: #143e5e;
+    cursor: pointer;
+}
+h1, h2, h3, h4, h5, h6, legend {
+    font-family: "Roboto Slab","ff-tisa-web-pro","Georgia",Arial,sans-serif;
+    font-weight: 700;
+    color: #143e5e;
+}
+h1.title, h1.title p {
+  
+  color: #fcfcfc;
+  font-size: 1%;
+}
+
+
+a:hover, #main .nav-pills > li.active > a:focus {
+  color: #FFFFFF !important;
+  background-color: #00253D;
+}
+
+#main .nav-pills > li > a {
+  background-color: #EEEEEE;
+  background-image: none;
+  background-position: 0 0;
+  color: #00253D;
+}
+
+#main .nav-pills > li.active > a, #main .nav-pills > li.active > a:hover, #main .nav-pills > li.active > a:focus {
+  color: #FFFFFF !important;
+  background-color: #00253D;
+}
+
+#main .nav-pills > li > a:hover {
+  color: #FFFFFF !important;
+  background-color: #00253D;
+}
+```
+
+```{r in, echo=FALSE, width = '75%'}
+knitr::include_graphics(
+'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/capa_nivel_atividade.png'
+)
+```
+
+# INTRODUÇÃO
+
+<div style="text-align: justify">
+
+Este relatório foi orgnizado a partir da aplicação web **OEB-Data** e, 
+neste sentido, todos os dados foram compilados e reportados pela **Ordem dos 
+Economistas do Brasil (OEB)**. Contudo, o conteúdo da análise é de inteira 
+responsabilidade de **`r params$responsavel`** 
+(**`r params$instituicao_do_responsavel`**).
+
+```{r dados,include=FALSE, message=FALSE, warning=FALSE}
+url <- 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/resultados_nivel_atividade.rds'
+
+temp <-  tempfile()
+
+download.file(url, destfile = temp)
+
+resultado <- readRDS(temp)
+```
+
+# TÓPICO 1
+
+## Subtópico 1 {.tabset .tabset-fade .tabset-pills}
+
+### gráfico 1.1
+
+### gráfico 1.2
+
+
+
