@@ -110,7 +110,7 @@ download.file(url, destfile = temp)
 resultado <- readRDS(temp)
 ```
 
-# IPCA (Índice Cheio)
+# INFLAÇÃO
 
 ## Análise da Inflação {.tabset .tabset-fade .tabset-pills}
 
@@ -134,8 +134,6 @@ resultado[['grafico_ipca_var_mensal']]
 resultado[['grafico_ipca_var_acum_ano']]
 ```
 
-
-# IPCA (por Grupos)
 
 ## Análise da Inflação por Grupos de Itens {.tabset .tabset-fade .tabset-pills}
 
@@ -165,7 +163,6 @@ resultado[['grafico_ipca_var_mensal_grupo']]
 resultado[['grafico_ipca_var_acum_ano_grupo']]
 ```
 
-# IPCA (tipos de Itens)
 
 ## Análise da Inflação por Tipos de Itens {.tabset .tabset-fade .tabset-pills}
 

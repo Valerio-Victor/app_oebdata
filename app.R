@@ -2103,33 +2103,134 @@ output$grafico_r_i_setor_externo <- plotly::renderPlotly(
 
 
 
+# Parâmetros Conjuntura Total: --------------------------------------------
+responsavel_total <- reactive(input$nome_responsavel_total)
+instituicao_do_responsavel_total <- reactive(input$inst_responsavel_total)
+texto_pib_total <- reactive(input$texto_pib_total)
+texto_hiato_total <- reactive(input$texto_pib_hiato_total)
+texto_producao_setorial_total <- reactive(input$texto_otica_produto_total)
+texto_demanda_agregada_total <- reactive(input$texto_otica_demanda_total)
+texto_indicadores_total <- reactive(input$texto_nivel_atividade_total)
+texto_inflacao_cheia_total <- reactive(input$texto_inflacao_cheia_total)
+texto_inflacao_grupos_total <- reactive(input$texto_inflacao_grupos_total)
+texto_inflacao_itens_total <- reactive(input$texto_inflacao_itens_inflacao_total)
+texto_cambio_dolar_total <- reactive(input$texto_dolar_total)
+texto_cambio_euro_total <- reactive(input$texto_euro_total)
+texto_bp_total <- reactive(input$texto_bp_total)
+texto_indicadores_bp_total <- reactive(input$texto_indicadores_bp_total)
 
 
-
-
-# nome <- reactive(input$nome_responsavel)
-#
-# instituicao <- reactive(input$inst_responsavel)
-#
-# pib_texto <- reactive(input$texto_pib)
-#
-# texto_pib_hiato <- reactive(input$texto_pib_hiato)
-#
-# otica_produto_texto <- reactive(input$texto_otica_produto)
-#
-# otica_demanda_texto <- reactive(input$texto_otica_demanda)
-#
+# Exportar Conjuntura Total: ----------------------------------------------
 output$exportar_total <- downloadHandler(
   filename = 'relatorio_conjuntura_oeb.html',
   content = function(file) {
-   rmarkdown::render(
-     input = 'www/template_conjuntura.Rmd',
-     output_file = file
-   )
+    rmarkdown::render(
+      input = 'www/template_conjuntura.Rmd',
+      output_file = file,
+      params = list(responsavel_total = responsavel_total(),
+                    instituicao_do_responsavel_total = instituicao_do_responsavel_total(),
+                    texto_pib_total = texto_pib_total(),
+                    texto_hiato_total = texto_hiato_total(),
+                    texto_producao_setorial_total = texto_producao_setorial_total(),
+                    texto_demanda_agregada_total = texto_demanda_agregada_total(),
+                    texto_indicadores_total = texto_indicadores_total(),
+                    texto_inflacao_cheia_total = texto_inflacao_cheia_total(),
+                    texto_inflacao_grupos_total = texto_inflacao_grupos_total(),
+                    texto_inflacao_itens_total = texto_inflacao_itens_total(),
+                    texto_cambio_dolar_total = texto_cambio_dolar_total(),
+                    texto_cambio_euro_total = texto_cambio_euro_total(),
+                    texto_bp_total = texto_bp_total(),
+                    texto_indicadores_bp_total = texto_indicadores_bp_total())
+    )
   }
 )
 
 
+# Parâmetros Nível de Atividade: ------------------------------------------
+responsavel_nivel_atividade <- reactive(input$nome_responsavel_nivel_atividade)
+instituicao_do_responsavel_nivel_atividade <- reactive(input$inst_responsavel_nivel_atividade)
+texto_pib_nivel_atividade <- reactive(input$texto_pib_nivel_atividade)
+texto_hiato_nivel_atividade <- reactive(input$texto_pib_hiato_nivel_atividade)
+texto_producao_setorial_nivel_atividade <- reactive(input$texto_otica_produto_nivel_atividade)
+texto_demanda_agregada_nivel_atividade <- reactive(input$texto_otica_demanda_nivel_atividade)
+texto_indicadores_nivel_atividade <- reactive(input$texto_nivel_atividade_nivel_atividade)
+
+
+
+# Exportar Nível de Atividade: --------------------------------------------
+output$exportar_nivel_atividade <- downloadHandler(
+  filename = 'caderno_nivel_atividade_oeb.html',
+  content = function(file) {
+    rmarkdown::render(
+      input = 'www/template_nivel_atividade.Rmd',
+      output_file = file,
+      params = list(
+        responsavel_nivel_atividade = responsavel_nivel_atividade(),
+        instituicao_do_responsavel_nivel_atividade = instituicao_do_responsavel_nivel_atividade(),
+        texto_pib_nivel_atividade = texto_pib_nivel_atividade(),
+        texto_hiato_nivel_atividade = texto_hiato_nivel_atividade(),
+        texto_producao_setorial_nivel_atividade = texto_producao_setorial_nivel_atividade(),
+        texto_demanda_agregada_nivel_atividade = texto_demanda_agregada_nivel_atividade(),
+        texto_indicadores_nivel_atividade = texto_indicadores_nivel_atividade())
+    )
+  }
+)
+
+
+# Parâmetros Taxa de Inflação: --------------------------------------------
+responsavel_inflacao <- reactive(input$nome_responsavel_taxa_inflacao)
+instituicao_do_responsavel_inflacao <- reactive(input$inst_responsavel_taxa_inflacao)
+texto_inflacao_cheia_inflacao <- reactive(input$texto_inflacao_cheia_taxa_inflacao)
+texto_inflacao_grupos_inflacao <- reactive(input$texto_inflacao_grupos_taxa_inflacao)
+texto_inflacao_itens_inflacao <- reactive(input$texto_inflacao_itens_inflacao_taxa_inflacao)
+
+
+# Exportar Taxa de Inflação: ----------------------------------------------
+output$exportar_taxa_inflacao <- downloadHandler(
+  filename = 'caderno_de_inflacao_oeb.html',
+  content = function(file) {
+    rmarkdown::render(
+      input = 'www/template_inflacao.Rmd',
+      output_file = file,
+      params = list(
+        responsavel_inflacao = responsavel_inflacao(),
+        instituicao_do_responsavel_inflacao = instituicao_do_responsavel_inflacao(),
+        texto_inflacao_cheia_inflacao = texto_inflacao_cheia_inflacao(),
+        texto_inflacao_grupos_inflacao = texto_inflacao_grupos_inflacao(),
+        texto_inflacao_itens_inflacao = texto_inflacao_itens_inflacao()
+        )
+    )
+  }
+)
+
+
+# Parâmetros Setor Externo: -----------------------------------------------
+responsavel_setor_externo  <- reactive(input$nome_responsavel_setor_externo)
+instituicao_do_responsavel_setor_externo <- reactive(input$inst_responsavel_setor_externo)
+texto_cambio_dolar_setor_externo <- reactive(input$texto_dolar_setor_externo)
+texto_cambio_euro_setor_externo <- reactive(input$texto_euro_setor_externo)
+texto_bp_setor_externo <- reactive(input$texto_bp_setor_externo)
+texto_indicadores_bp_setor_externo <- reactive(input$texto_indicadores_bp_setor_externo)
+
+
+# Exportar Relatório Setor Externo: ---------------------------------------
+output$exportar_setor_externo <- downloadHandler(
+  filename = 'caderno_setor_externo_oeb.html',
+  content = function(file) {
+    rmarkdown::render(
+      input = 'www/template_setor_externo.Rmd',
+      output_file = file,
+      params = list(
+        responsavel_setor_externo = responsavel_setor_externo(),
+        instituicao_do_responsavel_setor_externo = instituicao_do_responsavel_setor_externo(),
+        texto_cambio_dolar_setor_externo = texto_cambio_dolar_setor_externo(),
+        texto_cambio_euro_setor_externo = texto_cambio_euro_setor_externo(),
+        texto_bp_setor_externo = texto_bp_setor_externo(),
+        texto_indicadores_bp_setor_externo = texto_indicadores_bp_setor_externo()
+      )
+    )
+  }
+)
 
 
 
