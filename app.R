@@ -14,17 +14,20 @@ library(htmltools)
 #---------------------------------------------------------------------------------------------------
 #-----------------------------------ARQUIVOS TEMPORÁRIOS--------------------------------------------
 #---------------------------------------------------------------------------------------------------
-url_total = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/resultados_total'
+url_total = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/resultados_total.rds'
 url_nivel_atividade = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/resultados_nivel_atividade.rds'
 url_setor_externo = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/resultados_setor_externo.rds'
+url_inflacao = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/resultados_inflacao.rds'
 
 temporario_total = tempfile()
 temporario_nivel_atividade = tempfile()
 temporario_setor_externo = tempfile()
+temporario_inflacao = tempfile()
 
 download.file(url_total, destfile = temporario_total)
 download.file(url_nivel_atividade, destfile = temporario_nivel_atividade)
 download.file(url_setor_externo, destfile = temporario_setor_externo)
+download.file(url_inflacao, destfile = temporario_inflacao)
 #---------------------------------------------------------------------------------------------------
 #--------------------------------------------UI-----------------------------------------------------
 #---------------------------------------------------------------------------------------------------
@@ -50,6 +53,10 @@ menuSubItem('Caderno de Nível de Atividade',
 tabName = 'nivel_atividade',
 icon = icon('file-alt')
 ),
+menuSubItem('Caderno de Inflação',
+            tabName = 'taxa_inflacao',
+            icon = icon('file-alt')
+),
 menuSubItem('Caderno de Setor Externo',
             tabName = 'setor_externo',
             icon = icon('file-alt')
@@ -70,6 +77,19 @@ div(style = 'text-align:center', 'Versão 3.0.1')
 dashboardBody(
 
 tabItems(
+
+tabItem(tabName = 'quemsomos',
+
+fluidRow(
+column(width = 1),
+column(width = 11,
+tags$img(src = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/capa_app.png',
+         width = '960px', height = '540px')
+)
+)
+
+
+),
 
 
 #---------------------------------------------------------------------------------------------------
@@ -232,13 +252,10 @@ column(width = 7,
 fluidRow(
 column(width = 12, plotly::plotlyOutput(outputId = 'grafico_pib_setores_indice_total'))
 ),
-fluidRow(
-column(width = 12, plotly::plotlyOutput(outputId = 'grafico_var_pib_setores_indice_total'))
-)
 ),
 column(width = 5,
        reactable::reactableOutput(outputId = 'tabela_pib_setores_vc_total',
-                                  height = '763px')
+                                  height = '763px') ######################################################## Corrigir Tamanho
 )
 ),
 fluidRow(
@@ -283,13 +300,10 @@ column(width = 7,
 fluidRow(
 column(width = 12, plotly::plotlyOutput(outputId = 'grafico_pib_demanda_indice_total'))
 ),
-fluidRow(
-column(width = 12, plotly::plotlyOutput(outputId = 'grafico_var_pib_demanda_indice_total'))
-)
 ),
 column(width = 5,
        reactable::reactableOutput(outputId = 'tabela_pib_demanda_vc_total',
-                                  height = '763px')
+                                  height = '763px') ######################################################## Corrigir Tamanho
 )
 ),
 fluidRow(
@@ -314,9 +328,473 @@ column(width = 12, textAreaInput(inputId = 'texto_otica_demanda_total',
 )
 )
 )
+),
+
+
+div(style = 'text-align: center; color: #3c8dbc',
+    h1('ANÁLISE DO NÍVEL DE ATIVIDADE')),
+
+
+fluidRow(
+box(
+title = '',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 6,
+fluidRow(
+column(width = 12, plotly::plotlyOutput(outputId = 'grafico_ibc_br_total')),
+column(width = 12, plotly::plotlyOutput(outputId = 'grafico_pim_sa_indice_total')),
+)
+),
+column(width = 6,
+fluidRow(
+column(width = 12, plotly::plotlyOutput(outputId = 'grafico_pmc_sa_indice_total')),
+column(width = 12, plotly::plotlyOutput(outputId = 'grafico_pms_sa_indice_total')),
+)
+)
+),
+fluidRow(
+column(width = 12,
+box(
+title = 'ANÁLISE DO NÍVEL DE ATIVIDADE:',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12, textAreaInput(inputId = 'texto_nivel_atividade_total',
+                                 label = '',
+                                 value = 'Insira aqui a sua análise...',
+                                 width = '100%',
+                                 rows = 5,
+                                 resize = 'vertical')
+)
+)
+)
+)
+)
+)
+),
+
+
+div(style = 'text-align: center; color: #3c8dbc',
+    h1('IPCA - ÍNDICE CHEIO')),
+
+
+fluidRow(
+box(
+title = '',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_ipca_indice_total')
+)
+),
+fluidRow(
+column(width = 6,
+plotly::plotlyOutput(outputId = 'grafico_ipca_var_mensal_total')
+),
+column(width = 6,
+plotly::plotlyOutput(outputId = 'grafico_ipca_var_acum_ano_total')
+)
+),
+fluidRow(
+column(width = 12,
+box(
+title = 'ANÁLISE DOS INDICADORES DA INFLAÇÃO CHEIA:',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12, textAreaInput(inputId = 'texto_inflacao_cheia_total',
+                                 label = h4(''),
+                                 value = 'Insira aqui a sua análise...',
+                                 width = '100%',
+                                 rows = 5,
+                                 resize = 'vertical')
+)
+)
+)
+)
+)
+)
+),
+
+
+div(style = 'text-align: center; color: #3c8dbc',
+    h1('IPCA (POR GRUPOS DE ITENS)')),
+
+
+fluidRow(
+box(
+title = '',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_ipca_peso_grupo_total')
+)
+)
+),
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_difusao_total')
+)
+)
+)
+),
+fluidRow(
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_ipca_var_mensal_grupo_total')
+)
+)
+),
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_ipca_var_acum_ano_grupo_total')
+)
+)
+)
+),
+fluidRow(
+column(width = 12,
+box(
+title = 'ANÁLISE DA INFLAÇÃO (POR GRUPOS DE ITENS):',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12, textAreaInput(inputId = 'texto_inflacao_grupos_total',
+                                 label = h4(''),
+                                 value = 'Insira aqui a sua análise...',
+                                 width = '100%',
+                                 rows = 5,
+                                 resize = 'vertical')
+)
+)
+)
+)
+)
+)
+),
+
+
+div(style = 'text-align: center; color: #3c8dbc',
+    h1('IPCA (POR TIPOS DE ITENS)')),
+
+
+fluidRow(
+box(
+title = '',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_livres_monitorados_total')
+)
+)
+),
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_livres_monitorados_acum_total')
+)
+)
+)
+),
+fluidRow(
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_comercializaveis_nao_comercializaveis_total')
+)
+)
+),
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_comercializaveis_nao_comercializaveis_acum_total')
+)
+)
+)
+),
+fluidRow(
+column(width = 12,
+box(
+title = 'ANÁLISE DA INFLAÇÃO (POR TIPOS DE ITENS):',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12, textAreaInput(inputId = 'texto_inflacao_itens_inflacao_total',
+                                 label = h4(''),
+                                 value = 'Insira aqui a sua análise...',
+                                 width = '100%',
+                                 rows = 5,
+                                 resize = 'vertical')
+)
+)
+)
+)
+)
+)
+),
+
+
+div(style = 'text-align: center; color: #3c8dbc',
+    h1('TAXA DE CÂMBIO')),
+
+
+fluidRow(
+box(
+title = '',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_nominal_dolar_total')
+)
+)
+),
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_var_nominal_dolar_total')
+)
+)
+)
+),
+fluidRow(
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_real_dolar_total')
+)
+)
+),
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_var_real_dolar_total')
+)
+)
+)
+),
+fluidRow(
+column(width = 12,
+box(
+title = 'ANÁLISE DA TAXA DE CÂMBIO (REAL/DÓLAR):',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12, textAreaInput(inputId = 'texto_dolar_total',
+                                 label = h4(''),
+                                 value = 'Insira aqui a sua análise...',
+                                 width = '100%',
+                                 rows = 5,
+                                 resize = 'vertical')
+)
+)
+)
+)
+),
+fluidRow(
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_nominal_euro_total')
+)
+)
+),
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_var_nominal_euro_total')
+)
+)
+)
+),
+fluidRow(
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_real_euro_total')
+)
+)
+),
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_var_real_euro_total')
+)
+)
+)
+),
+fluidRow(
+column(width = 12,
+box(
+title = 'ANÁLISE DA TAXA DE CÂMBIO (REAL/EURO):',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12, textAreaInput(inputId = 'texto_euro_total',
+                                 label = h4(''),
+                                 value = 'Insira aqui a sua análise...',
+                                 width = '100%',
+                                 rows = 5,
+                                 resize = 'vertical')
+)
+)
+)
+)
+)
+)
+),
+
+
+div(style = 'text-align: center; color: #3c8dbc',
+    h1('BALANÇO DE PAGAMENTOS')),
+
+
+fluidRow(
+box(
+title = '',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_saldo_tc_total')
+)
+)
+),
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_saldo_cf_total')
+)
+)
+)
+),
+fluidRow(
+column(width = 12,
+box(
+title = 'ANÁLISE DO BALANÇO DE PAGAMENTOS:',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12, textAreaInput(inputId = 'texto_bp_total',
+                                 label = '',
+                                 value = 'Insira aqui a sua análise...',
+                                 width = '100%',
+                                 rows = 5,
+                                 resize = 'vertical')
+)
+)
+)
+)
+)
+)
+),
+
+
+div(style = 'text-align: center; color: #3c8dbc',
+    h1('INDICADORES DE SETOR EXTERNO')),
+
+
+fluidRow(
+box(
+title = '',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_r_i_total')
+)
+),
+fluidRow(
+column(width = 6,
+plotly::plotlyOutput(outputId = 'grafico_tc_pib_total')
+),
+column(width = 6,
+plotly::plotlyOutput(outputId = 'grafico_id_pib_total')
+)
+),
+fluidRow(
+column(width = 12,
+box(
+title = 'ANÁLISE DOS INDICADORES DE SETOR EXTERNO:',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12, textAreaInput(inputId = 'texto_indicadores_bp_total',
+                                 label = h4(''),
+                                 value = 'Insira aqui a sua análise...',
+                                 width = '100%',
+                                 rows = 5,
+                                 resize = 'vertical')
+)
+)
+)
+)
+)
+)
 )
 
-),
+), # Fim do Tabitem Conjuntura Total
 
 
 #---------------------------------------------------------------------------------------------------
@@ -479,13 +957,10 @@ column(width = 7,
 fluidRow(
 column(width = 12, plotly::plotlyOutput(outputId = 'grafico_pib_setores_indice_nivel_atividade'))
 ),
-fluidRow(
-column(width = 12, plotly::plotlyOutput(outputId = 'grafico_var_pib_setores_indice_nivel_atividade'))
-)
 ),
 column(width = 5,
        reactable::reactableOutput(outputId = 'tabela_pib_setores_vc_nivel_atividade',
-                                  height = '763px')
+                                  height = '763px') ######################################################## Corrigir Tamanho
 )
 ),
 fluidRow(
@@ -530,13 +1005,10 @@ column(width = 7,
 fluidRow(
 column(width = 12, plotly::plotlyOutput(outputId = 'grafico_pib_demanda_indice_nivel_atividade'))
 ),
-fluidRow(
-column(width = 12, plotly::plotlyOutput(outputId = 'grafico_var_pib_demanda_indice_nivel_atividade'))
-)
 ),
 column(width = 5,
        reactable::reactableOutput(outputId = 'tabela_pib_demanda_vc_nivel_atividade',
-                                  height = '763px')
+                                  height = '763px') ######################################################## Corrigir Tamanho
 )
 ),
 fluidRow(
@@ -561,10 +1033,321 @@ column(width = 12, textAreaInput(inputId = 'texto_otica_demanda_nivel_atividade'
 )
 )
 )
-)
-
 ),
 
+
+div(style = 'text-align: center; color: #3c8dbc',
+    h1('ANÁLISE DO NÍVEL DE ATIVIDADE')),
+
+
+fluidRow(
+box(
+title = '',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 6,
+fluidRow(
+column(width = 12, plotly::plotlyOutput(outputId = 'grafico_ibc_br_nivel_atividade')),
+column(width = 12, plotly::plotlyOutput(outputId = 'grafico_pim_sa_indice_nivel_atividade')),
+)
+),
+column(width = 6,
+fluidRow(
+column(width = 12, plotly::plotlyOutput(outputId = 'grafico_pmc_sa_indice_nivel_atividade')),
+column(width = 12, plotly::plotlyOutput(outputId = 'grafico_pms_sa_indice_nivel_atividade')),
+)
+)
+),
+fluidRow(
+column(width = 12,
+box(
+title = 'ANÁLISE DO NÍVEL DE ATIVIDADE:',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12, textAreaInput(inputId = 'texto_nivel_atividade_nivel_atividade',
+                                 label = '',
+                                 value = 'Insira aqui a sua análise...',
+                                 width = '100%',
+                                 rows = 5,
+                                 resize = 'vertical')
+)
+)
+)
+)
+)
+)
+)
+
+
+), # Fim do Tabitem Nível de Atividade
+
+
+#---------------------------------------------------------------------------------------------------
+#---------------------------------------TAXA DE INFLAÇÃO--------------------------------------------
+#---------------------------------------------------------------------------------------------------
+tabItem(tabName = 'taxa_inflacao',
+
+
+fluidRow(
+column(width = 8,
+box(
+title = strong('PARTE I - INSERIR DADOS DO ANALISTA'),
+width = 12,
+status = 'primary',
+background = 'light-blue',
+solidHeader = FALSE,
+collapsible = FALSE,
+closable = FALSE,
+fluidRow(
+column(width = 12, textInput(inputId = 'nome_responsavel_taxa_inflacao',
+                             label = h4('Analista Responsável:'),
+                             value = 'Insira o seu nome...')
+)
+),
+fluidRow(
+column(width = 12, textInput(inputId = 'inst_responsavel_taxa_inflacao',
+                             label = h4('Instituição do Analista:'),
+                             value = 'Insira o nome de sua instituição...')
+)
+)
+)
+),
+column(width = 4,
+fluidRow(
+box(
+title = strong('PARTE II - INICIAR ANÁLISE DOS DADOS'),
+width = 12,
+status = 'primary',
+background = 'light-blue',
+solidHeader = FALSE,
+collapsible = FALSE,
+closable = FALSE,
+fluidRow(
+column(width = 12, actionButton(inputId = 'iniciar_taxa_inflacao',
+                                label = 'Importar os dados')
+)
+),
+br()
+)
+),
+fluidRow(
+box(
+title = strong('PARTE III - EXPORTAR ANÁLISE DOS DADOS'),
+width = 12,
+status = 'primary',
+background = 'light-blue',
+solidHeader = FALSE,
+collapsible = FALSE,
+closable = FALSE,
+fluidRow(
+column(width = 12, downloadButton(outputId = 'exportar_taxa_inflacao',
+                                    label = 'Exportar Relatório')
+)
+),
+br()
+)
+)
+)
+),
+
+
+div(style = 'text-align: center; color: #3c8dbc',
+    h1('IPCA - ÍNDICE CHEIO')),
+
+
+fluidRow(
+box(
+title = '',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_ipca_indice_taxa_inflacao')
+)
+),
+fluidRow(
+column(width = 6,
+plotly::plotlyOutput(outputId = 'grafico_ipca_var_mensal_taxa_inflacao')
+),
+column(width = 6,
+plotly::plotlyOutput(outputId = 'grafico_ipca_var_acum_ano_taxa_inflacao')
+)
+),
+fluidRow(
+column(width = 12,
+box(
+title = 'ANÁLISE DOS INDICADORES DA INFLAÇÃO CHEIA:',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12, textAreaInput(inputId = 'texto_inflacao_cheia_taxa_inflacao',
+                                 label = h4(''),
+                                 value = 'Insira aqui a sua análise...',
+                                 width = '100%',
+                                 rows = 5,
+                                 resize = 'vertical')
+)
+)
+)
+)
+)
+)
+),
+
+
+div(style = 'text-align: center; color: #3c8dbc',
+    h1('IPCA (POR GRUPOS DE ITENS)')),
+
+
+fluidRow(
+box(
+title = '',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_ipca_peso_grupo_taxa_inflacao')
+)
+)
+),
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_difusao_taxa_inflacao')
+)
+)
+)
+),
+fluidRow(
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_ipca_var_mensal_grupo_taxa_inflacao')
+)
+)
+),
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_ipca_var_acum_ano_grupo_taxa_inflacao')
+)
+)
+)
+),
+fluidRow(
+column(width = 12,
+box(
+title = 'ANÁLISE DA INFLAÇÃO (POR GRUPOS DE ITENS):',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12, textAreaInput(inputId = 'texto_inflacao_grupos_taxa_inflacao',
+                                 label = h4(''),
+                                 value = 'Insira aqui a sua análise...',
+                                 width = '100%',
+                                 rows = 5,
+                                 resize = 'vertical')
+)
+)
+)
+)
+)
+)
+),
+
+
+div(style = 'text-align: center; color: #3c8dbc',
+    h1('IPCA (POR TIPOS DE ITENS)')),
+
+
+fluidRow(
+box(
+title = '',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_livres_monitorados_taxa_inflacao')
+)
+)
+),
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_livres_monitorados_acum_taxa_inflacao')
+)
+)
+)
+),
+fluidRow(
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_comercializaveis_nao_comercializaveis_taxa_inflacao')
+)
+)
+),
+column(width = 6,
+fluidRow(
+column(width = 12,
+plotly::plotlyOutput(outputId = 'grafico_comercializaveis_nao_comercializaveis_acum_taxa_inflacao')
+)
+)
+)
+),
+fluidRow(
+column(width = 12,
+box(
+title = 'ANÁLISE DA INFLAÇÃO (POR TIPOS DE ITENS):',
+width = 12,
+status = 'primary',
+solidHeader = TRUE,
+collapsible = FALSE,
+collapsed = FALSE,
+fluidRow(
+column(width = 12, textAreaInput(inputId = 'texto_inflacao_itens_inflacao_taxa_inflacao',
+                                 label = h4(''),
+                                 value = 'Insira aqui a sua análise...',
+                                 width = '100%',
+                                 rows = 5,
+                                 resize = 'vertical')
+)
+)
+)
+)
+)
+)
+)
+
+
+), # Fim do Tabitem Setor Externo
 
 #---------------------------------------------------------------------------------------------------
 #------------------------------------------SETOR EXTERNO--------------------------------------------
@@ -701,14 +1484,14 @@ fluidRow(
 column(width = 6,
 fluidRow(
 column(width = 12,
-       plotly::plotlyOutput(outputId = 'grafico_nominal_euro_setor_externo')
+plotly::plotlyOutput(outputId = 'grafico_nominal_euro_setor_externo')
 )
 )
 ),
 column(width = 6,
 fluidRow(
 column(width = 12,
-       plotly::plotlyOutput(outputId = 'grafico_var_nominal_euro_setor_externo')
+plotly::plotlyOutput(outputId = 'grafico_var_nominal_euro_setor_externo')
 )
 )
 )
@@ -717,7 +1500,7 @@ fluidRow(
 column(width = 6,
 fluidRow(
 column(width = 12,
-       plotly::plotlyOutput(outputId = 'grafico_real_euro_setor_externo')
+plotly::plotlyOutput(outputId = 'grafico_real_euro_setor_externo')
 )
 )
 ),
@@ -770,14 +1553,14 @@ fluidRow(
 column(width = 6,
 fluidRow(
 column(width = 12,
-       plotly::plotlyOutput(outputId = 'grafico_saldo_tc_setor_externo')
+plotly::plotlyOutput(outputId = 'grafico_saldo_tc_setor_externo')
 )
 )
 ),
 column(width = 6,
 fluidRow(
 column(width = 12,
-       plotly::plotlyOutput(outputId = 'grafico_tc_pib_setor_externo')
+plotly::plotlyOutput(outputId = 'grafico_saldo_cf_setor_externo')
 )
 )
 )
@@ -785,51 +1568,14 @@ column(width = 12,
 fluidRow(
 column(width = 12,
 box(
-title = 'ANÁLISE DO SALDO EM TRANSAÇÕES CORRENTES:',
+title = 'ANÁLISE DO BALANÇO DE PAGAMENTOS:',
 width = 12,
 status = 'primary',
 solidHeader = TRUE,
 collapsible = FALSE,
 collapsed = FALSE,
 fluidRow(
-column(width = 12, textAreaInput(inputId = 'texto_tc_setor_externo',
-                                 label = h4(''),
-                                 value = 'Insira aqui a sua análise...',
-                                 width = '100%',
-                                 rows = 5,
-                                 resize = 'vertical')
-)
-)
-)
-)
-),
-fluidRow(
-column(width = 6,
-fluidRow(
-column(width = 12,
-       plotly::plotlyOutput(outputId = 'grafico_saldo_cf_setor_externo')
-)
-)
-),
-column(width = 6,
-fluidRow(
-column(width = 12,
-       plotly::plotlyOutput(outputId = 'grafico_id_pib_setor_externo')
-)
-)
-)
-),
-fluidRow(
-column(width = 12,
-box(
-title = 'ANÁLISE DA CONTA FINANCEIRA:',
-width = 12,
-status = 'primary',
-solidHeader = TRUE,
-collapsible = FALSE,
-collapsed = FALSE,
-fluidRow(
-column(width = 12, textAreaInput(inputId = 'texto_cf_setor_externo',
+column(width = 12, textAreaInput(inputId = 'texto_bp_setor_externo',
                                  label = h4(''),
                                  value = 'Insira aqui a sua análise...',
                                  width = '100%',
@@ -845,7 +1591,7 @@ column(width = 12, textAreaInput(inputId = 'texto_cf_setor_externo',
 
 
 div(style = 'text-align: center; color: #3c8dbc',
-    h1('RESERVAS INTERNACIONAIS')),
+    h1('INDICADORES DE SETOR EXTERNO')),
 
 
 fluidRow(
@@ -858,24 +1604,28 @@ collapsible = FALSE,
 collapsed = FALSE,
 fluidRow(
 column(width = 12,
-fluidRow(
-column(width = 12,
-       plotly::plotlyOutput(outputId = 'grafico_r_i_setor_externo')
-)
+plotly::plotlyOutput(outputId = 'grafico_r_i_setor_externo')
 )
 ),
+fluidRow(
+column(width = 6,
+plotly::plotlyOutput(outputId = 'grafico_tc_pib_setor_externo')
+),
+column(width = 6,
+plotly::plotlyOutput(outputId = 'grafico_id_pib_setor_externo')
+)
 ),
 fluidRow(
 column(width = 12,
 box(
-title = 'ANÁLISE DO ESTOQUE EM RESERVAS INTERNACIONAIS:',
+title = 'ANÁLISE DOS INDICADORES DE SETOR EXTERNO:',
 width = 12,
 status = 'primary',
 solidHeader = TRUE,
 collapsible = FALSE,
 collapsed = FALSE,
 fluidRow(
-column(width = 12, textAreaInput(inputId = 'texto_reservas_setor_externo',
+column(width = 12, textAreaInput(inputId = 'texto_indicadores_bp_setor_externo',
                                  label = h4(''),
                                  value = 'Insira aqui a sua análise...',
                                  width = '100%',
@@ -888,12 +1638,9 @@ column(width = 12, textAreaInput(inputId = 'texto_reservas_setor_externo',
 )
 )
 )
-)
 
 
-
-
-
+) # Fim do Tabitem Setor Externo
 
 
 
@@ -942,10 +1689,12 @@ column(width = 12, textAreaInput(inputId = 'texto_reservas_setor_externo',
 server <- function(input, output, session) {
 
 
+
+
+
+
 # Importação dos Dados ---------------------------------------------------------
 observeEvent(input$iniciar_setor_externo, {
-
-
 
 withProgress(message = 'Iniciando a análise...', value = 0.1, {
 

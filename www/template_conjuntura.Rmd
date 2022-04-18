@@ -6,8 +6,20 @@ output:
   rmdformats::readthedown:
     highlight: kate
 params:
-  responsavel: ''
-  instituicao_do_responsavel: ''
+  responsavel_total: ''
+  instituicao_do_responsavel_total: ''
+  texto_pib_total: ''
+  texto_hiato_total: ''
+  texto_producao_setorial_total: ''
+  texto_demanda_agregada_total: ''
+  texto_indicadores_total: ''
+  texto_inflacao_cheia_total: ''
+  texto_inflacao_grupos_total: ''
+  texto_inflacao_itens_total: ''
+  texto_cambio_dolar_total: ''
+  texto_cambio_euro_total: ''
+  texto_bp_total: ''
+  texto_indicadores_bp_total: ''
 ---
 
 ```{css, echo = F}
@@ -81,7 +93,7 @@ a:hover, #main .nav-pills > li.active > a:focus {
 }
 ```
 
-```{r in, echo=FALSE, width = '75%'}
+```{r, echo=FALSE, width = '75%'}
 knitr::include_graphics(
 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/capa_conjuntura.png'
 )
@@ -94,10 +106,10 @@ knitr::include_graphics(
 Este relatório foi orgnizado a partir da aplicação web **OEB-Data** e, 
 neste sentido, todos os dados foram compilados e reportados pela **Ordem dos 
 Economistas do Brasil (OEB)**. Contudo, o conteúdo da análise é de inteira 
-responsabilidade de **`r params$responsavel`** 
-(**`r params$instituicao_do_responsavel`**).
+responsabilidade de **`r params$responsavel_total`** 
+(**`r params$instituicao_do_responsavel_total`**).
 
-```{r dados,include=FALSE, message=FALSE, warning=FALSE}
+```{r,include=FALSE, message=FALSE, warning=FALSE}
 url <-  'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/resultados_total.rds'
 
 temp <-  tempfile()
@@ -107,13 +119,296 @@ download.file(url, destfile = temp)
 resultado <- readRDS(temp)
 ```
 
-# TÓPICO 1
+# PRODUTO INTERNO BRUTO
 
-## Subtópico 1 {.tabset .tabset-fade .tabset-pills}
+## Produto Interno Bruto {.tabset .tabset-fade .tabset-pills}
 
-### gráfico 1.1
+`r params$texto_pib_total`
 
-### gráfico 1.2
+### PIB (Gráfico do Índice)
 
+```{r, echo=FALSE}
+resultado[['grafico_pib_indice']]
+```
+
+### PIB (Gráfico da Variação do Índice)
+
+```{r, echo=FALSE}
+resultado[['grafico_var_pib_indice']]
+```
+
+### PIB (Tabela de Valores Reais)
+
+```{r, echo=FALSE}
+resultado[['tabela_pib_vc']]
+```
+
+## Hiato do Produto {.tabset .tabset-fade .tabset-pills}
+
+`r params$texto_hiato_total`
+
+### PIB Efetivo versus PIB Potencial (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_real_potencial']]
+```
+
+### Hiato do Produto (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_hiato']]
+```
+
+# ÓTICA DO PRODUTO
+
+## Produção Setorial {.tabset .tabset-fade .tabset-pills}
+
+`r params$texto_producao_setorial_total`
+
+### Produção Setorial (Gráfico do Índice)
+
+```{r, echo=FALSE}
+resultado[['grafico_pib_setores_indice']]
+```
+
+### Produção Setorial (Tabela de Valores Reais)
+
+```{r, echo=FALSE}
+resultado[['tabela_pib_setores_vc']]
+```
+
+# ÓTICA DA DEMANDA AGREGADA
+
+## Componentes da Demanda Agregada {.tabset .tabset-fade .tabset-pills}
+
+`r params$texto_demanda_agregada_total`
+
+### Componentes da Demanda (Gráfico do Índice)
+
+```{r, echo=FALSE}
+resultado[['grafico_pib_demanda_indice']]
+```
+
+### Componentes da Demanda (Tabela de Valores Reais)
+
+```{r, echo=FALSE}
+resultado[['tabela_pib_demanda_vc']]
+```
+
+# NÍVEL DE ATIVIDADE
+
+## Indicadores de Nível de Atividade {.tabset .tabset-fade .tabset-pills}
+
+`r params$texto_indicadores_total`
+
+### IBC-BR (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_ibc_br']]
+```
+
+### PIM (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_pim_sa_indice']]
+```
+
+### PMC (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_pmc_sa_indice']]
+```
+
+### PMS (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_pms_sa_indice']]
+```
+
+# IPCA (Índice Cheio)
+
+## Análise da Inflação {.tabset .tabset-fade .tabset-pills}
+
+`r params$texto_inflacao_cheia_total`
+
+### IPCA - Índice (Gráfico))
+
+```{r, echo=FALSE}
+resultado[['grafico_ipca_indice']]
+```
+
+### IPCA - Variação Mensal (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_ipca_var_mensal']]
+```
+
+### IPCA - Variação Acumulada no Ano (Gráfico))
+
+```{r, echo=FALSE}
+resultado[['grafico_ipca_var_acum_ano']]
+```
+
+
+# IPCA (por Grupos)
+
+## Análise da Inflação por Grupos de Itens {.tabset .tabset-fade .tabset-pills}
+
+`r params$texto_inflacao_grupos_total`
+
+### IPCA - Peso dos Grupos (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_ipca_peso_grupo']]
+```
+
+### IPCA - Índice de Difusão (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_difusao']]
+```
+
+### IPCA - Variação Mensal por Grupo (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_ipca_var_mensal_grupo']]
+```
+
+### IPCA - Variação Acumulada no Ano por Grupo (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_ipca_var_acum_ano_grupo']]
+```
+
+# IPCA (tipos de Itens)
+
+## Análise da Inflação por Tipos de Itens {.tabset .tabset-fade .tabset-pills}
+
+`r params$texto_inflacao_itens_total`
+
+### Livres versus Monitorados - Variação Mensal (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_livres_monitorados']]
+```
+
+### Livres versus Monitorados - Variação Acumulada no Ano (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_livres_monitorados_acum']]
+```
+
+### Comercializáveis versus Não Comercializáveis - Variação Mensal (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_comercializaveis_nao_comercializaveis']]
+```
+
+### Comercializáveis versus Não Comercializáveis - Variação Acumulada no Ano (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_comercializaveis_nao_comercializaveis_acum']]
+```
+
+
+# TAXA DE CÂMBIO 
+
+## Dólar Americano {.tabset .tabset-fade .tabset-pills}
+
+`r params$texto_cambio_dolar_total`
+
+### Taxa Nominal (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_nominal_dolar']]
+```
+
+### Variação da Taxa Nominal (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_var_nominal_dolar']]
+```
+
+### Taxa Real (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_real_dolar']]
+```
+
+### Variação da Taxa Real (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_var_real_dolar']]
+```
+
+## Euro {.tabset .tabset-fade .tabset-pills}
+
+`r params$texto_cambio_euro_total`
+
+### Taxa Nominal (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_nominal_euro']]
+```
+
+### Variação da Taxa Nominal (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_var_nominal_euro']]
+```
+
+### Taxa Real (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_real_euro']]
+```
+
+### Variação da Taxa Real (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_var_real_euro']]
+```
+
+# BALANÇO DE PAGAMENTOS 
+
+## Contas {.tabset .tabset-fade .tabset-pills}
+
+`r params$texto_bp_total`
+
+### Saldo em Transações Correntes (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_saldo_tc']]
+```
+
+### Saldo Conta Financeira (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_saldo_cf']]
+```
+
+# INDICADORES
+
+## Indicadores de Setor Externo {.tabset .tabset-fade .tabset-pills}
+
+`r params$texto_indicadores_bp_total`
+
+### Déficit em Transações Correntes em Proporção do PIB (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_tc_pib']]
+```
+
+### Investimento Direto em Proporção do PIB (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_id_pib']]
+```
+
+### Reservas Internacionais (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_r_i']]
+```
 
 

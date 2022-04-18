@@ -6,8 +6,14 @@ output:
   rmdformats::readthedown:
     highlight: kate
 params:
-  responsavel: ''
-  instituicao_do_responsavel: ''
+  responsavel_nivel_atividade: ''
+  instituicao_do_responsavel_nivel_atividade: ''
+  texto_pib_nivel_atividade: ''
+  texto_hiato_nivel_atividade: ''
+  texto_producao_setorial_nivel_atividade: ''
+  texto_demanda_agregada_nivel_atividade: ''
+  texto_indicadores_nivel_atividade: ''
+
 ---
 
 ```{css, echo = F}
@@ -81,7 +87,7 @@ a:hover, #main .nav-pills > li.active > a:focus {
 }
 ```
 
-```{r in, echo=FALSE, width = '75%'}
+```{r, echo=FALSE, width = '75%'}
 knitr::include_graphics(
 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/capa_nivel_atividade.png'
 )
@@ -94,10 +100,10 @@ knitr::include_graphics(
 Este relatório foi orgnizado a partir da aplicação web **OEB-Data** e, 
 neste sentido, todos os dados foram compilados e reportados pela **Ordem dos 
 Economistas do Brasil (OEB)**. Contudo, o conteúdo da análise é de inteira 
-responsabilidade de **`r params$responsavel`** 
-(**`r params$instituicao_do_responsavel`**).
+responsabilidade de **`r params$responsavel_nivel_atividade`** 
+(**`r params$instituicao_do_responsavel_nivel_atividade`**).
 
-```{r dados,include=FALSE, message=FALSE, warning=FALSE}
+```{r,include=FALSE, message=FALSE, warning=FALSE}
 url <- 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/resultados_nivel_atividade.rds'
 
 temp <-  tempfile()
@@ -107,13 +113,118 @@ download.file(url, destfile = temp)
 resultado <- readRDS(temp)
 ```
 
-# TÓPICO 1
+# PRODUTO INTERNO BRUTO
 
-## Subtópico 1 {.tabset .tabset-fade .tabset-pills}
+## Produto Interno Bruto {.tabset .tabset-fade .tabset-pills}
 
-### gráfico 1.1
+`r params$texto_pib_nivel_atividade`
 
-### gráfico 1.2
+### PIB (Gráfico do Índice)
+
+```{r, echo=FALSE}
+resultado[['grafico_pib_indice']]
+```
+
+### PIB (Gráfico da Variação do Índice)
+
+```{r, echo=FALSE}
+resultado[['grafico_var_pib_indice']]
+```
+
+### PIB (Tabela de Valores Reais)
+
+```{r, echo=FALSE}
+resultado[['tabela_pib_vc']]
+```
+
+## Hiato do Produto {.tabset .tabset-fade .tabset-pills}
+
+`r params$texto_hiato_nivel_atividade`
+
+### PIB Efetivo versus PIB Potencial (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_real_potencial']]
+```
+
+### Hiato do Produto (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_hiato']]
+```
+
+# ÓTICA DO PRODUTO
+
+## Produção Setorial {.tabset .tabset-fade .tabset-pills}
+
+`r params$texto_producao_setorial_nivel_atividade`
+
+### Produção Setorial (Gráfico do Índice)
+
+```{r, echo=FALSE}
+resultado[['grafico_pib_setores_indice']]
+```
+
+### Produção Setorial (Tabela de Valores Reais)
+
+```{r, echo=FALSE}
+resultado[['tabela_pib_setores_vc']]
+```
+
+# ÓTICA DA DEMANDA AGREGADA
+
+## Componentes da Demanda Agregada {.tabset .tabset-fade .tabset-pills}
+
+`r params$texto_demanda_agregada_nivel_atividade`
+
+### Componentes da Demanda (Gráfico do Índice)
+
+```{r, echo=FALSE}
+resultado[['grafico_pib_demanda_indice']]
+```
+
+### Componentes da Demanda (Tabela de Valores Reais)
+
+```{r, echo=FALSE}
+resultado[['tabela_pib_demanda_vc']]
+```
+
+# NÍVEL DE ATIVIDADE
+
+## Indicadores de Nível de Atividade {.tabset .tabset-fade .tabset-pills}
+
+`r params$texto_indicadores_nivel_atividade`
+
+### IBC-BR (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_ibc_br']]
+```
+
+### PIM (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_pim_sa_indice']]
+```
+
+### PMC (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_pmc_sa_indice']]
+```
+
+### PMS (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_pms_sa_indice']]
+```
+
+
+
+
+
+
+
 
 
 

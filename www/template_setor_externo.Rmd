@@ -6,8 +6,12 @@ output:
   rmdformats::readthedown:
     highlight: kate
 params:
-  responsavel: ''
-  instituicao_do_responsavel: ''
+  responsavel_setor_externo: ''
+  instituicao_do_responsavel_setor_externo: ''
+  texto_cambio_dolar_setor_externo: ''
+  texto_cambio_euro_setor_externo: ''
+  texto_bp_setor_externo: ''
+  texto_indicadores_bp_setor_externo: ''
 ---
 
 ```{css, echo = F}
@@ -81,7 +85,7 @@ a:hover, #main .nav-pills > li.active > a:focus {
 }
 ```
 
-```{r in, echo=FALSE, width = '75%'}
+```{r, echo=FALSE, width = '75%'}
 knitr::include_graphics(
 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/capa_setor_externo.png'
 )
@@ -94,10 +98,10 @@ knitr::include_graphics(
 Este relatório foi orgnizado a partir da aplicação web **OEB-Data** e, 
 neste sentido, todos os dados foram compilados e reportados pela **Ordem dos 
 Economistas do Brasil (OEB)**. Contudo, o conteúdo da análise é de inteira 
-responsabilidade de **`r params$responsavel`** 
-(**`r params$instituicao_do_responsavel`**).
+responsabilidade de **`r params$responsavel_setor_externo`** 
+(**`r params$instituicao_do_responsavel_setor_externo`**).
 
-```{r dados,include=FALSE, message=FALSE, warning=FALSE}
+```{r,include=FALSE, message=FALSE, warning=FALSE}
 url <- 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/resultados_setor_externo.rds'
 
 temp <-  tempfile()
@@ -107,13 +111,126 @@ download.file(url, destfile = temp)
 resultado <- readRDS(temp)
 ```
 
-# TÓPICO 1
+# TAXA DE CÂMBIO 
 
-## Subtópico 1 {.tabset .tabset-fade .tabset-pills}
+## Dólar Americano {.tabset .tabset-fade .tabset-pills}
 
-### gráfico 1.1
+`r params$texto_cambio_dolar_setor_externo`
 
-### gráfico 1.2
+### Taxa Nominal (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_nominal_dolar']]
+```
+
+### Variação da Taxa Nominal (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_var_nominal_dolar']]
+```
+
+### Taxa Real (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_real_dolar']]
+```
+
+### Variação da Taxa Real (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_var_real_dolar']]
+```
+
+## Euro {.tabset .tabset-fade .tabset-pills}
+
+`r params$texto_cambio_euro_setor_externo`
+
+### Taxa Nominal (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_nominal_euro']]
+```
+
+### Variação da Taxa Nominal (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_var_nominal_euro']]
+```
+
+### Taxa Real (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_real_euro']]
+```
+
+### Variação da Taxa Real (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_var_real_euro']]
+```
+
+# BALANÇO DE PAGAMENTOS 
+
+## Contas {.tabset .tabset-fade .tabset-pills}
+
+`r params$texto_bp_setor_externo`
+
+### Saldo em Transações Correntes (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_saldo_tc']]
+```
+
+### Saldo Conta Financeira (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_saldo_cf']]
+```
+
+# INDICADORES
+
+## Indicadores de Setor Externo {.tabset .tabset-fade .tabset-pills}
+
+`r params$texto_indicadores_bp_setor_externo`
+
+### Déficit em Transações Correntes em Proporção do PIB (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_tc_pib']]
+```
+
+### Investimento Direto em Proporção do PIB (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_id_pib']]
+```
+
+### Reservas Internacionais (Gráfico)
+
+```{r, echo=FALSE}
+resultado[['grafico_r_i']]
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
