@@ -255,7 +255,7 @@ column(width = 12, plotly::plotlyOutput(outputId = 'grafico_pib_setores_indice_t
 ),
 column(width = 5,
        reactable::reactableOutput(outputId = 'tabela_pib_setores_vc_total',
-                                  height = '763px') ######################################################## Corrigir Tamanho
+                                  height = '381.5px') ######################################################## Corrigir Tamanho
 )
 ),
 fluidRow(
@@ -303,7 +303,7 @@ column(width = 12, plotly::plotlyOutput(outputId = 'grafico_pib_demanda_indice_t
 ),
 column(width = 5,
        reactable::reactableOutput(outputId = 'tabela_pib_demanda_vc_total',
-                                  height = '763px') ######################################################## Corrigir Tamanho
+                                  height = '381.5px') ######################################################## Corrigir Tamanho
 )
 ),
 fluidRow(
@@ -887,7 +887,7 @@ column(width = 12, plotly::plotlyOutput(outputId = 'grafico_var_pib_indice_nivel
 ),
 column(width = 5,
        reactable::reactableOutput(outputId = 'tabela_pib_vc_nivel_atividade',
-                                    height = '763px')
+                                  height = '763px')
 )
 ),
 fluidRow(
@@ -960,7 +960,7 @@ column(width = 12, plotly::plotlyOutput(outputId = 'grafico_pib_setores_indice_n
 ),
 column(width = 5,
        reactable::reactableOutput(outputId = 'tabela_pib_setores_vc_nivel_atividade',
-                                  height = '763px') ######################################################## Corrigir Tamanho
+                                  height = '381.5px') ######################################################## Corrigir Tamanho
 )
 ),
 fluidRow(
@@ -1008,7 +1008,7 @@ column(width = 12, plotly::plotlyOutput(outputId = 'grafico_pib_demanda_indice_n
 ),
 column(width = 5,
        reactable::reactableOutput(outputId = 'tabela_pib_demanda_vc_nivel_atividade',
-                                  height = '763px') ######################################################## Corrigir Tamanho
+                                  height = '381.5px') ######################################################## Corrigir Tamanho
 )
 ),
 fluidRow(
@@ -1688,12 +1688,345 @@ column(width = 12, textAreaInput(inputId = 'texto_indicadores_bp_setor_externo',
 #---------------------------------------------------------------------------------------------------
 server <- function(input, output, session) {
 
+# -------------------------------------------------------------------------
+# -------------------------------------------------------------------------
+# Conjuntura Total:-- -----------------------------------------------------
+# -------------------------------------------------------------------------
+# -------------------------------------------------------------------------
+
+observeEvent(input$iniciar_total, {
+
+withProgress(message = 'Iniciando a análise...', value = 0.1, {
+
+Sys.sleep(1)
+
+incProgress(0.9)
+
+incProgress(1, message = 'Importando os dados...')
+
+Sys.sleep(1)
+
+incProgress(7, message = 'Aguarde, mesmo após a barra de progresso desaparecer há processamento de dados!')
+
+Sys.sleep(3)
+
+})
+
+resultados_total <- readRDS(temporario_total)
+
+output$grafico_pib_indice_total <- plotly::renderPlotly(
+resultados_total[['grafico_pib_indice']]
+)
+
+output$grafico_var_pib_indice_total <- plotly::renderPlotly(
+  resultados_total[['grafico_var_pib_indice']]
+)
+
+output$tabela_pib_vc_total <- reactable::renderReactable(
+  resultados_total[['tabela_pib_vc']]
+)
+
+output$grafico_real_potencial_total <- plotly::renderPlotly(
+  resultados_total[['grafico_real_potencial']]
+)
+
+output$grafico_hiato_total <- plotly::renderPlotly(
+  resultados_total[['grafico_hiato']]
+)
+
+output$grafico_pib_setores_indice_total <- plotly::renderPlotly(
+  resultados_total[['grafico_pib_setores_indice']]
+)
+
+output$tabela_pib_setores_vc_total <- reactable::renderReactable(
+  resultados_total[['tabela_pib_setores_vc']]
+)
+
+output$grafico_pib_demanda_indice_total <- plotly::renderPlotly(
+  resultados_total[['grafico_pib_demanda_indice']]
+)
+
+output$tabela_pib_demanda_vc_total <- reactable::renderReactable(
+  resultados_total[['tabela_pib_demanda_vc']]
+)
+
+output$grafico_ibc_br_total <- plotly::renderPlotly(
+  resultados_total[['grafico_ibc_br']]
+)
+
+output$grafico_pim_sa_indice_total <- plotly::renderPlotly(
+  resultados_total[['grafico_pim_sa_indice']]
+)
+
+output$grafico_pmc_sa_indice_total <- plotly::renderPlotly(
+  resultados_total[['grafico_pmc_sa_indice']]
+)
+
+output$grafico_pms_sa_indice_total <- plotly::renderPlotly(
+  resultados_total[['grafico_pms_sa_indice']]
+)
+
+output$grafico_ipca_indice_total <- plotly::renderPlotly(
+  resultados_total[['grafico_ipca_indice']]
+)
+
+output$grafico_ipca_var_mensal_total <- plotly::renderPlotly(
+  resultados_total[['grafico_ipca_var_mensal']]
+)
+
+output$grafico_ipca_var_acum_ano_total <- plotly::renderPlotly(
+  resultados_total[['grafico_ipca_var_acum_ano']]
+)
+
+output$grafico_ipca_peso_grupo_total <- plotly::renderPlotly(
+  resultados_total[['grafico_ipca_peso_grupo']]
+)
+
+output$grafico_difusao_total <- plotly::renderPlotly(
+  resultados_total[['grafico_difusao']]
+)
+
+output$grafico_ipca_var_mensal_grupo_total <- plotly::renderPlotly(
+  resultados_total[['grafico_ipca_var_mensal_grupo']]
+)
+
+output$grafico_ipca_var_acum_ano_grupo_total <- plotly::renderPlotly(
+  resultados_total[['grafico_ipca_var_acum_ano_grupo']]
+)
+
+output$grafico_livres_monitorados_total <- plotly::renderPlotly(
+  resultados_total[['grafico_livres_monitorados']]
+)
+
+output$grafico_livres_monitorados_acum_total <- plotly::renderPlotly(
+  resultados_total[['grafico_livres_monitorados_acum']]
+)
+
+output$grafico_comercializaveis_nao_comercializaveis_total <- plotly::renderPlotly(
+  resultados_total[['grafico_comercializaveis_nao_comercializaveis']]
+)
+
+output$grafico_comercializaveis_nao_comercializaveis_acum_total <- plotly::renderPlotly(
+  resultados_total[['grafico_comercializaveis_nao_comercializaveis_acum']]
+)
+
+output$grafico_nominal_dolar_total <- plotly::renderPlotly(
+  resultados_total[['grafico_nominal_dolar']]
+)
+
+output$grafico_var_nominal_dolar_total <- plotly::renderPlotly(
+  resultados_total[['grafico_var_nominal_dolar']]
+)
+
+output$grafico_real_dolar_total <- plotly::renderPlotly(
+  resultados_total[['grafico_real_dolar']]
+)
+
+output$grafico_var_real_dolar_total <- plotly::renderPlotly(
+  resultados_total[['grafico_var_real_dolar']]
+)
+
+output$grafico_nominal_euro_total <- plotly::renderPlotly(
+  resultados_total[['grafico_nominal_euro']]
+)
+
+output$grafico_var_nominal_euro_total <- plotly::renderPlotly(
+  resultados_total[['grafico_var_nominal_euro']]
+)
+
+output$grafico_real_euro_total <- plotly::renderPlotly(
+  resultados_total[['grafico_real_euro']]
+)
+
+output$grafico_var_real_euro_total <- plotly::renderPlotly(
+  resultados_total[['grafico_var_real_euro']]
+)
+
+output$grafico_saldo_tc_total <- plotly::renderPlotly(
+  resultados_total[['grafico_saldo_tc']]
+)
+
+output$grafico_tc_pib_total <- plotly::renderPlotly(
+  resultados_total[['grafico_tc_pib']]
+)
+
+output$grafico_saldo_cf_total <- plotly::renderPlotly(
+  resultados_total[['grafico_saldo_cf']]
+)
+
+output$grafico_id_pib_total <- plotly::renderPlotly(
+  resultados_total[['grafico_id_pib']]
+)
+
+output$grafico_r_i_total <- plotly::renderPlotly(
+  resultados_total[['grafico_r_i']]
+)
+
+})
+
+
+# -------------------------------------------------------------------------
+# -------------------------------------------------------------------------
+# Nível de Atividade: -----------------------------------------------------
+# -------------------------------------------------------------------------
+# -------------------------------------------------------------------------
+
+observeEvent(input$iniciar_nivel_atividade, {
+
+withProgress(message = 'Iniciando a análise...', value = 0.1, {
+
+Sys.sleep(1)
+
+incProgress(0.9)
+
+incProgress(1, message = 'Importando os dados...')
+
+Sys.sleep(1)
+
+incProgress(7, message = 'Aguarde, mesmo após a barra de progresso desaparecer há processamento de dados!')
+
+Sys.sleep(3)
+
+})
+
+resultados_nivel_atividade <- readRDS(temporario_nivel_atividade)
+
+output$grafico_pib_indice_nivel_atividade <- plotly::renderPlotly(
+    resultados_nivel_atividade[['grafico_pib_indice']]
+)
+
+output$grafico_var_pib_indice_nivel_atividade <- plotly::renderPlotly(
+  resultados_nivel_atividade[['grafico_var_pib_indice']]
+)
+
+output$tabela_pib_vc_nivel_atividade <- reactable::renderReactable(
+  resultados_nivel_atividade[['tabela_pib_vc']]
+)
+
+output$grafico_real_potencial_nivel_atividade <- plotly::renderPlotly(
+  resultados_nivel_atividade[['grafico_real_potencial']]
+)
+
+output$grafico_hiato_nivel_atividade <- plotly::renderPlotly(
+  resultados_nivel_atividade[['grafico_hiato']]
+)
+
+output$grafico_pib_setores_indice_nivel_atividade <- plotly::renderPlotly(
+  resultados_nivel_atividade[['grafico_pib_setores_indice']]
+)
+
+output$tabela_pib_setores_vc_nivel_atividade <- reactable::renderReactable(
+  resultados_nivel_atividade[['tabela_pib_setores_vc']]
+)
+
+output$grafico_pib_demanda_indice_nivel_atividade <- plotly::renderPlotly(
+  resultados_nivel_atividade[['grafico_pib_demanda_indice']]
+)
+
+output$tabela_pib_demanda_vc_nivel_atividade <- reactable::renderReactable(
+  resultados_nivel_atividade[['tabela_pib_demanda_vc']]
+)
+
+output$grafico_ibc_br_nivel_atividade <- plotly::renderPlotly(
+  resultados_nivel_atividade[['grafico_ibc_br']]
+)
+
+output$grafico_pim_sa_indice_nivel_atividade <- plotly::renderPlotly(
+  resultados_nivel_atividade[['grafico_pim_sa_indice']]
+)
+
+output$grafico_pmc_sa_indice_nivel_atividade <- plotly::renderPlotly(
+  resultados_nivel_atividade[['grafico_pmc_sa_indice']]
+)
+
+output$grafico_pms_sa_indice_nivel_atividade <- plotly::renderPlotly(
+  resultados_nivel_atividade[['grafico_pms_sa_indice']]
+)
+
+
+})
+
+
+# -------------------------------------------------------------------------
+# -------------------------------------------------------------------------
+# Taxa de Inflação: -------------------------------------------------------
+# -------------------------------------------------------------------------
+# -------------------------------------------------------------------------
+
+observeEvent(input$iniciar_taxa_inflacao, {
+
+withProgress(message = 'Iniciando a análise...', value = 0.1, {
+
+Sys.sleep(1)
+
+incProgress(0.9)
+
+incProgress(1, message = 'Importando os dados...')
+
+Sys.sleep(1)
+
+incProgress(7, message = 'Aguarde, mesmo após a barra de progresso desaparecer há processamento de dados!')
+
+Sys.sleep(3)
+
+})
+
+resultados_taxa_inflacao <- readRDS(temporario_inflacao)
+
+output$grafico_ipca_indice_taxa_inflacao <- plotly::renderPlotly(
+resultados_taxa_inflacao[['grafico_ipca_indice']]
+)
+
+output$grafico_ipca_var_mensal_taxa_inflacao <- plotly::renderPlotly(
+  resultados_taxa_inflacao[['grafico_ipca_var_mensal']]
+)
+
+output$grafico_ipca_var_acum_ano_taxa_inflacao <- plotly::renderPlotly(
+  resultados_taxa_inflacao[['grafico_ipca_var_acum_ano']]
+)
+
+output$grafico_ipca_peso_grupo_taxa_inflacao <- plotly::renderPlotly(
+  resultados_taxa_inflacao[['grafico_ipca_peso_grupo']]
+)
+
+output$grafico_difusao_taxa_inflacao <- plotly::renderPlotly(
+  resultados_taxa_inflacao[['grafico_difusao']]
+)
+
+output$grafico_ipca_var_mensal_grupo_taxa_inflacao <- plotly::renderPlotly(
+  resultados_taxa_inflacao[['grafico_ipca_var_mensal_grupo']]
+)
+
+output$grafico_ipca_var_acum_ano_grupo_taxa_inflacao <- plotly::renderPlotly(
+  resultados_taxa_inflacao[['grafico_ipca_var_acum_ano_grupo']]
+)
+
+output$grafico_livres_monitorados_taxa_inflacao <- plotly::renderPlotly(
+  resultados_taxa_inflacao[['grafico_livres_monitorados']]
+)
+
+output$grafico_livres_monitorados_acum_taxa_inflacao <- plotly::renderPlotly(
+  resultados_taxa_inflacao[['grafico_livres_monitorados_acum']]
+)
+
+output$grafico_comercializaveis_nao_comercializaveis_taxa_inflacao <- plotly::renderPlotly(
+  resultados_taxa_inflacao[['grafico_comercializaveis_nao_comercializaveis']]
+)
+
+output$grafico_comercializaveis_nao_comercializaveis_acum_taxa_inflacao <- plotly::renderPlotly(
+  resultados_taxa_inflacao[['grafico_comercializaveis_nao_comercializaveis_acum']]
+)
+
+})
 
 
 
+# -------------------------------------------------------------------------
+# -------------------------------------------------------------------------
+# Setor Externo: ----------------------------------------------------------
+# -------------------------------------------------------------------------
+# -------------------------------------------------------------------------
 
-
-# Importação dos Dados ---------------------------------------------------------
 observeEvent(input$iniciar_setor_externo, {
 
 withProgress(message = 'Iniciando a análise...', value = 0.1, {
@@ -1768,6 +2101,12 @@ output$grafico_r_i_setor_externo <- plotly::renderPlotly(
 
 })
 
+
+
+
+
+
+
 # nome <- reactive(input$nome_responsavel)
 #
 # instituicao <- reactive(input$inst_responsavel)
@@ -1789,96 +2128,7 @@ output$exportar_total <- downloadHandler(
    )
   }
 )
-#
-#
-# # Importação dos Dados ---------------------------------------------------------
-# observeEvent(input$iniciar, {
-#
-#
-#
-#   withProgress(message = 'Iniciando a análise...', value = 0.1, {
-#
-#     Sys.sleep(1)
-#
-#     incProgress(0.9)
-#
-#     incProgress(1, message = 'Importando os dados...')
-#
-#     Sys.sleep(1)
-#
-#     incProgress(7, message = 'Aguarde, mesmo após a barra de progresso desaparecer há processamento de dados!')
-#
-#     Sys.sleep(3)
-#
-#   })
-#
-#   resultados <- readRDS(temporario)
-#
-#   output$grafico_pib_indice <- plotly::renderPlotly(
-#     resultados[['grafico_pib_indice']]
-#   )
-#
-#   output$grafico_var_pib_indice <- plotly::renderPlotly(
-#     resultados[['grafico_var_pib_indice']]
-#   )
-#
-#   output$tabela_pib_vc <- reactable::renderReactable(
-#     resultados[['tabela_pib_vc']]
-#   )
-#
-#   output$grafico_real_potencial <- plotly::renderPlotly(
-#     resultados[['grafico_real_potencial']]
-#   )
-#
-#   output$grafico_hiato <- plotly::renderPlotly(
-#     resultados[['grafico_hiato']]
-#   )
-#
-#   output$grafico_pib_setores_indice <- plotly::renderPlotly(
-#     resultados[['grafico_pib_setores_indice']]
-#   )
-#
-#   output$grafico_var_pib_setores_indice <- plotly::renderPlotly(
-#     resultados[['grafico_var_pib_setores_indice']]
-#   )
-#
-#   output$tabela_pib_setores_vc <- reactable::renderReactable(
-#     resultados[['tabela_pib_setores_vc']]
-#   )
-#
-#   output$grafico_pib_demanda_indice <- plotly::renderPlotly(
-#     resultados[['grafico_pib_demanda_indice']]
-#   )
-#
-#   output$grafico_var_pib_demanda_indice <- plotly::renderPlotly(
-#     resultados[['grafico_var_pib_demanda_indice']]
-#   )
-#
-#   output$tabela_pib_demanda_vc <- reactable::renderReactable(
-#     resultados[['tabela_pib_demanda_vc']]
-#   )
-#
-#   output$grafico_saldo_tc <- plotly::renderPlotly(
-#     resultados[['grafico_saldo_tc']]
-#   )
-#
-#   output$grafico_tc_pib <- reactable::renderReactable(
-#     resultados[['grafico_tc_pib']]
-#   )
-#
-#   output$grafico_pib_demanda_indice <- plotly::renderPlotly(
-#     resultados[['grafico_saldo_cf']]
-#   )
-#
-#   output$grafico_var_pib_demanda_indice <- plotly::renderPlotly(
-#     resultados[['grafico_id_pib']]
-#   )
-#
-#   output$tabela_pib_demanda_vc <- reactable::renderReactable(
-#     resultados[['grafico_r_i']]
-#   )
-#
-# })
+
 
 
 
