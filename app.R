@@ -14,6 +14,7 @@ library(htmltools)
 #---------------------------------------------------------------------------------------------------
 #-----------------------------------ARQUIVOS TEMPORÁRIOS--------------------------------------------
 #---------------------------------------------------------------------------------------------------
+# Gráficos Plotly:
 url_total = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/resultados_total.rds'
 url_nivel_atividade = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/resultados_nivel_atividade.rds'
 url_setor_externo = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/resultados_setor_externo.rds'
@@ -28,6 +29,31 @@ download.file(url_total, destfile = temporario_total)
 download.file(url_nivel_atividade, destfile = temporario_nivel_atividade)
 download.file(url_setor_externo, destfile = temporario_setor_externo)
 download.file(url_inflacao, destfile = temporario_inflacao)
+
+# Tabelas Excel:
+url_tabela_total = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/oeb_conjuntura.rds'
+url_tabela_nivel_atividade = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/oeb_nivel_de_atividade.rds'
+url_tabela_setor_externo = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/oeb_taxa_de_cambio.rds'
+url_tabela_inflacao = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/oeb_taxa_de_inflacao.rds'
+
+temporario_tabela_total = tempfile()
+temporario_tabela_nivel_atividade = tempfile()
+temporario_tabela_setor_externo = tempfile()
+temporario_tabela_inflacao = tempfile()
+
+download.file(url_tabela_total, destfile = temporario_tabela_total)
+download.file(url_tabela_nivel_atividade, destfile = temporario_tabela_nivel_atividade)
+download.file(url_tabela_setor_externo, destfile = temporario_tabela_setor_externo)
+download.file(url_tabela_inflacao, destfile = temporario_tabela_inflacao)
+
+tabela_total <- as.list.data.frame(readRDS(temporario_tabela_total))
+tabela_nivel_atividade <- as.list.data.frame(readRDS(temporario_tabela_nivel_atividade))
+tabela_setor_externo <- as.list.data.frame(readRDS(temporario_tabela_setor_externo))
+tabela_inflacao <- as.list.data.frame(readRDS(temporario_tabela_inflacao))
+
+
+#openxlsx::write.xlsx(teste, 'tabela_inflacao.xlsx')
+
 #---------------------------------------------------------------------------------------------------
 #--------------------------------------------UI-----------------------------------------------------
 #---------------------------------------------------------------------------------------------------
@@ -44,28 +70,26 @@ dashboardSidebar(width = 280,
 #---------------------------------------------------------------------------------------------------
 sidebarMenu(
 menuItem('', tabName = 'quemsomos'),
-menuItem('CONJUNTURA ECONÔMICA', tabName = 'macro', icon = icon('chart-area'),
-menuSubItem('Relatório de Conjuntura',
-              tabName = 'conjuntura_total',
-              icon = icon('file-alt')
+menuItem('Relatório de Conjuntura',
+         tabName = 'conjuntura_total',
+         icon = icon('file-alt')
 ),
-menuSubItem('Caderno de Nível de Atividade',
+menuItem('Caderno de Nível de Atividade',
 tabName = 'nivel_atividade',
 icon = icon('file-alt')
 ),
-menuSubItem('Caderno de Inflação',
+menuItem('Caderno de Inflação',
             tabName = 'taxa_inflacao',
             icon = icon('file-alt')
 ),
-menuSubItem('Caderno de Setor Externo',
+menuItem('Caderno de Setor Externo',
             tabName = 'setor_externo',
             icon = icon('file-alt')
-)
 ),
 
 hr(),
 
-div(style = 'text-align:center', 'Versão 3.0.1')
+div(style = 'text-align:center', 'Versão 3.1.1')
 
 )
 
@@ -150,8 +174,11 @@ solidHeader = FALSE,
 collapsible = FALSE,
 closable = FALSE,
 fluidRow(
-column(width = 12, downloadButton(outputId = 'exportar_total',
+column(width = 4, downloadButton(outputId = 'exportar_total',
                                   label = 'Exportar Relatório')
+),
+column(width = 8, downloadButton(outputId = 'exportar_total_tabela',
+                                 label = 'Exportar Dados')
 )
 ),
 br()
@@ -855,8 +882,11 @@ solidHeader = FALSE,
 collapsible = FALSE,
 closable = FALSE,
 fluidRow(
-column(width = 12, downloadButton(outputId = 'exportar_nivel_atividade',
+column(width = 4, downloadButton(outputId = 'exportar_nivel_atividade',
 label = 'Exportar Relatório')
+),
+column(width = 8, downloadButton(outputId = 'exportar_nivel_atividade_tabela',
+                                 label = 'Exportar Dados')
 )
 ),
 br()
@@ -1148,8 +1178,11 @@ solidHeader = FALSE,
 collapsible = FALSE,
 closable = FALSE,
 fluidRow(
-column(width = 12, downloadButton(outputId = 'exportar_taxa_inflacao',
+column(width = 4, downloadButton(outputId = 'exportar_taxa_inflacao',
                                     label = 'Exportar Relatório')
+),
+column(width = 8, downloadButton(outputId = 'exportar_taxa_inflacao_tabela',
+                                  label = 'Exportar Dados')
 )
 ),
 br()
@@ -1406,8 +1439,11 @@ solidHeader = FALSE,
 collapsible = FALSE,
 closable = FALSE,
 fluidRow(
-column(width = 12, downloadButton(outputId = 'exportar_setor_externo',
+column(width = 4, downloadButton(outputId = 'exportar_setor_externo',
                                   label = 'Exportar Relatório')
+),
+column(width = 8, downloadButton(outputId = 'exportar_setor_externo_tabela',
+                                  label = 'Exportar Dados')
 )
 ),
 br()
@@ -2146,6 +2182,14 @@ output$exportar_total <- downloadHandler(
 )
 
 
+output$exportar_total_tabela <- downloadHandler(
+  filename = 'tabela_conjuntura_oeb.xlsx',
+  content = function(file) {
+    openxlsx::write.xlsx(tabela_total, file)
+  }
+)
+
+
 # Parâmetros Nível de Atividade: ------------------------------------------
 responsavel_nivel_atividade <- reactive(input$nome_responsavel_nivel_atividade)
 instituicao_do_responsavel_nivel_atividade <- reactive(input$inst_responsavel_nivel_atividade)
@@ -2177,6 +2221,14 @@ output$exportar_nivel_atividade <- downloadHandler(
 )
 
 
+output$exportar_nivel_atividade_tabela <- downloadHandler(
+  filename = 'tabela_nivel_de_atividade_oeb.xlsx',
+  content = function(file) {
+    openxlsx::write.xlsx(tabela_nivel_atividade, file)
+  }
+)
+
+
 # Parâmetros Taxa de Inflação: --------------------------------------------
 responsavel_inflacao <- reactive(input$nome_responsavel_taxa_inflacao)
 instituicao_do_responsavel_inflacao <- reactive(input$inst_responsavel_taxa_inflacao)
@@ -2200,6 +2252,14 @@ output$exportar_taxa_inflacao <- downloadHandler(
         texto_inflacao_itens_inflacao = texto_inflacao_itens_inflacao()
         )
     )
+  }
+)
+
+
+output$exportar_taxa_inflacao_tabela <- downloadHandler(
+  filename = 'tabela_taxa_de_inflacao_oeb.xlsx',
+  content = function(file) {
+    openxlsx::write.xlsx(tabela_inflacao, file)
   }
 )
 
@@ -2233,6 +2293,12 @@ output$exportar_setor_externo <- downloadHandler(
 )
 
 
+output$exportar_setor_externo_tabela <- downloadHandler(
+  filename = 'tabela_setor_externo_oeb.xlsx',
+  content = function(file) {
+    openxlsx::write.xlsx(tabela_setor_externo, file)
+  }
+)
 
 
 
