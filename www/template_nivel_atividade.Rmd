@@ -97,7 +97,7 @@ knitr::include_graphics(
 
 <div style="text-align: justify">
 
-Este relatório foi orgnizado a partir da aplicação web **OEB-Data** e, 
+Este relatório foi organizado a partir da aplicação web **OEB-Data** e, 
 neste sentido, todos os dados foram compilados e reportados pela **Ordem dos 
 Economistas do Brasil (OEB)**. Contudo, o conteúdo da análise é de inteira 
 responsabilidade de **`r params$responsavel_nivel_atividade`** 
