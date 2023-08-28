@@ -19,37 +19,50 @@ url_total = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/result
 url_nivel_atividade = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/resultados_nivel_atividade.rds'
 url_setor_externo = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/resultados_setor_externo.rds'
 url_inflacao = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/resultados_inflacao.rds'
+url_politica_monetaria = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/resultados_politica_monetaria.rds'
+
 
 temporario_total = tempfile()
 temporario_nivel_atividade = tempfile()
 temporario_setor_externo = tempfile()
 temporario_inflacao = tempfile()
+temporario_politica_monetaria = tempfile()
+
 
 download.file(url_total, destfile = temporario_total)
 download.file(url_nivel_atividade, destfile = temporario_nivel_atividade)
 download.file(url_setor_externo, destfile = temporario_setor_externo)
 download.file(url_inflacao, destfile = temporario_inflacao)
+download.file(url_politica_monetaria, destfile = temporario_politica_monetaria)
+
 
 # Tabelas Excel:
 url_tabela_total = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/oeb_conjuntura.rds'
 url_tabela_nivel_atividade = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/oeb_nivel_de_atividade.rds'
 url_tabela_setor_externo = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/oeb_taxa_de_cambio.rds'
 url_tabela_inflacao = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/oeb_taxa_de_inflacao.rds'
+url_tabela_politica_monetaria = 'https://github.com/Valerio-Victor/app_oebdata_dev/raw/master/oeb_politica_monetaria.rds'
+
 
 temporario_tabela_total = tempfile()
 temporario_tabela_nivel_atividade = tempfile()
 temporario_tabela_setor_externo = tempfile()
 temporario_tabela_inflacao = tempfile()
+temporario_tabela_politica_monetaria = tempfile()
+
 
 download.file(url_tabela_total, destfile = temporario_tabela_total)
 download.file(url_tabela_nivel_atividade, destfile = temporario_tabela_nivel_atividade)
 download.file(url_tabela_setor_externo, destfile = temporario_tabela_setor_externo)
 download.file(url_tabela_inflacao, destfile = temporario_tabela_inflacao)
+download.file(url_tabela_politica_monetaria, destfile = temporario_tabela_politica_monetaria)
+
 
 tabela_total <- as.list.data.frame(readRDS(temporario_tabela_total))
 tabela_nivel_atividade <- as.list.data.frame(readRDS(temporario_tabela_nivel_atividade))
 tabela_setor_externo <- as.list.data.frame(readRDS(temporario_tabela_setor_externo))
 tabela_inflacao <- as.list.data.frame(readRDS(temporario_tabela_inflacao))
+tabela_politica_monetaria <- as.list.data.frame(readRDS(temporario_tabela_politica_monetaria))
 
 
 #openxlsx::write.xlsx(teste, 'tabela_inflacao.xlsx')
@@ -87,9 +100,14 @@ menuItem('Caderno de Setor Externo',
             icon = icon('file-alt')
 ),
 
+# menuItem('Caderno de Política Monetária',
+#          tabName = 'politica_monetaria',
+#          icon = icon('file-alt')
+# ),
+
 hr(),
 
-div(style = 'text-align:center', 'Versão 3.1.1')
+div(style = 'text-align:center', 'Versão 1.1.4')
 
 )
 
@@ -1676,7 +1694,85 @@ column(width = 12, textAreaInput(inputId = 'texto_indicadores_bp_setor_externo',
 )
 
 
-) # Fim do Tabitem Setor Externo
+),
+
+
+#---------------------------------------------------------------------------------------------------
+#---------------------------------------POLÍTICA MONETÁRIA------------------------------------------
+#---------------------------------------------------------------------------------------------------
+tabItem(tabName = 'politica_monetaria',
+
+
+fluidRow(
+column(width = 8,
+box(
+title = strong('PARTE I - INSERIR DADOS DO ANALISTA'),
+width = 12,
+status = 'primary',
+background = 'light-blue',
+solidHeader = FALSE,
+collapsible = FALSE,
+closable = FALSE,
+fluidRow(
+column(width = 12, textInput(inputId = 'nome_responsavel_politica_monetaria',
+                             label = h4('Analista Responsável:'),
+                             value = 'Insira o seu nome...')
+)
+),
+fluidRow(
+  column(width = 12, textInput(inputId = 'inst_responsavel_politica_monetaria',
+                               label = h4('Instituição do Analista:'),
+                               value = 'Insira o nome de sua instituição...')
+  )
+)
+)
+),
+column(width = 4,
+fluidRow(
+box(
+title = strong('PARTE II - INICIAR ANÁLISE DOS DADOS'),
+width = 12,
+status = 'primary',
+background = 'light-blue',
+solidHeader = FALSE,
+collapsible = FALSE,
+closable = FALSE,
+fluidRow(
+column(width = 12, actionButton(inputId = 'iniciar_politica_monetaria',
+                                label = 'Importar os Dados')
+)
+),
+br()
+)
+),
+fluidRow(
+box(
+title = strong('PARTE III - EXPORTAR ANÁLISE DOS DADOS'),
+width = 12,
+status = 'primary',
+background = 'light-blue',
+solidHeader = FALSE,
+collapsible = FALSE,
+closable = FALSE,
+fluidRow(
+column(width = 4, downloadButton(outputId = 'exportar_politica_monetaria',
+                                 label = 'Exportar Relatório')
+),
+column(width = 8, downloadButton(outputId = 'exportar_politica_monetaria_tabela',
+                                 label = 'Exportar Dados')
+)
+),
+br()
+)
+)
+)
+),
+
+div(style = 'text-align: center; color: #3c8dbc',
+    h1('TAXA DE JUROS NEUTRO'))
+
+
+) # Fim do tabitem de Política Monetária
 
 
 
